@@ -4,140 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Contrato de Alquiler</title>
+    
+    <!-- LIBRERÍAS PARA GENERAR PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
-        /* Estilos Generales */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f9;
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-
-        /* Contenedor del Formulario */
-        .form-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-
-        /* Grupos de Campos (Fieldset) */
-        fieldset {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-
-        legend {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #3498db;
-            padding: 0 10px;
-        }
-
-        /* Etiquetas y Campos de Entrada */
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box; /* Importante para que el padding no afecte el ancho total */
-            margin-bottom: 15px;
-            font-size: 1em;
-        }
-
-        /* Estilos para los Radio Buttons */
-        .radio-group div {
-            margin-bottom: 10px;
-        }
-        
-        .radio-group label {
-            display: inline-block;
-            margin-left: 8px;
-            font-weight: normal;
-        }
-
-        /* Lienzo de Firma (Canvas) */
-        canvas {
-            border: 2px dashed #007bff;
-            border-radius: 5px;
-            cursor: crosshair;
-            touch-action: none; /* Evita el scroll en móviles al dibujar */
-        }
-
-        .signature-pad {
-            margin-bottom: 20px;
-        }
-        
-        .signature-pad-actions {
-            text-align: right;
-            margin-top: -10px;
-        }
-
-        /* Botones */
-        button {
-            padding: 10px 15px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        
-        .clear-button {
-            background-color: #e74c3c;
-            color: white;
-        }
-        .clear-button:hover {
-            background-color: #c0392b;
-        }
-        
-        .submit-button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #2ecc71;
-            color: white;
-            font-size: 1.2em;
-            border-radius: 5px;
-        }
-        .submit-button:hover {
-            background-color: #27ae60;
-        }
-
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; line-height: 1.6; margin: 0; padding: 20px; }
+        .form-container { max-width: 800px; margin: 20px auto; padding: 30px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+        fieldset { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px; }
+        legend { font-size: 1.2em; font-weight: bold; color: #3498db; padding: 0 10px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input[type="text"], input[type="date"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 15px; font-size: 1em; }
+        .radio-group div { margin-bottom: 10px; }
+        .radio-group label { display: inline-block; margin-left: 8px; font-weight: normal; }
+        canvas { border: 2px dashed #007bff; border-radius: 5px; cursor: crosshair; touch-action: none; background-color: #fff; }
+        .signature-pad { margin-bottom: 20px; }
+        .signature-pad-actions { text-align: right; margin-top: -10px; }
+        button { padding: 10px 15px; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background-color 0.3s ease; }
+        .clear-button { background-color: #e74c3c; color: white; }
+        .clear-button:hover { background-color: #c0392b; }
+        .submit-button { display: block; width: 100%; padding: 15px; background-color: #2ecc71; color: white; font-size: 1.2em; border-radius: 5px; margin-top: 20px; }
+        .submit-button:hover { background-color: #27ae60; }
     </style>
 </head>
 <body>
 
     <div class="form-container">
         <h1>Formulario de Contrato de Alquiler</h1>
-        <form id="rental-form" action="#" method="POST">
+        <form id="contrato-form" onsubmit="return false;">
 
             <fieldset>
                 <legend>Datos de las Partes</legend>
                 <label for="arrendador">Nombre del Arrendador:</label>
                 <input type="text" id="arrendador" name="arrendador" placeholder="Nombre completo del propietario" required>
-
                 <label for="arrendatario">Nombre del Arrendatario:</label>
                 <input type="text" id="arrendatario" name="arrendatario" placeholder="Nombre completo del inquilino" required>
             </fieldset>
@@ -146,10 +47,8 @@
                 <legend>Detalles del Alquiler</legend>
                 <label for="fecha_inicio">Fecha de Inicio del Alquiler:</label>
                 <input type="date" id="fecha_inicio" name="fecha_inicio" required>
-
                 <label for="fecha_fin">Fecha de Finalización del Alquiler:</label>
                 <input type="date" id="fecha_fin" name="fecha_fin" required>
-
                 <label for="inmueble">Inmueble a alquilar:</label>
                 <select id="inmueble" name="inmueble" required>
                     <option value="" disabled selected>-- Seleccione un inmueble --</option>
@@ -159,85 +58,53 @@
                     <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
                     <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
                 </select>
-
                 <label>Motivo de la Estancia:</label>
                 <div class="radio-group">
-                    <div>
-                        <input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked>
-                        <label for="motivo_trabajo">Trabajo</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio">
-                        <label for="motivo_estudio">Estudio</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar">
-                        <label for="motivo_familiar">Visita Familiar</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="motivo_otros" name="motivo_estancia" value="otros">
-                        <label for="motivo_otros">Otros</label>
-                    </div>
+                    <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked><label for="motivo_trabajo">Trabajo</label></div>
+                    <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio"><label for="motivo_estudio">Estudio</label></div>
+                    <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar"><label for="motivo_familiar">Visita Familiar</label></div>
+                    <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
                 </div>
             </fieldset>
 
             <fieldset>
                 <legend>Firmas Digitales</legend>
-                
                 <div class="signature-pad">
                     <label for="firma_arrendador">Firma del Arrendador:</label>
                     <canvas id="firma_arrendador" width="700" height="200"></canvas>
-                    <div class="signature-pad-actions">
-                        <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button>
-                    </div>
+                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button></div>
                 </div>
-
                 <div class="signature-pad">
                     <label for="firma_arrendatario">Firma del Arrendatario:</label>
                     <canvas id="firma_arrendatario" width="700" height="200"></canvas>
-                     <div class="signature-pad-actions">
-                        <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button>
-                    </div>
+                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button></div>
                 </div>
             </fieldset>
 
-            <button type="submit" class="submit-button">Generar Contrato (Ejemplo)</button>
-
         </form>
+        <button id="generar-pdf-btn" class="submit-button">Firmar y Generar PDF</button>
     </div>
 
     <script>
-        // Función para limpiar un canvas por su ID
         function limpiarCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // Función para inicializar la lógica de dibujo en un canvas
         function inicializarCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             let dibujando = false;
-
-            // Ajustar el tamaño del canvas al de su contenedor si es necesario (para responsive)
-            // En este caso, lo dejamos fijo como está en el HTML, pero es una buena práctica.
-            // canvas.width = canvas.offsetWidth;
-            // canvas.height = canvas.offsetHeight;
-
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
             ctx.strokeStyle = '#000000';
 
             function getPosicion(evento) {
                 const rect = canvas.getBoundingClientRect();
-                // Manejar eventos de ratón y táctiles
                 const clientX = evento.clientX || evento.touches[0].clientX;
                 const clientY = evento.clientY || evento.touches[0].clientY;
-                return {
-                    x: clientX - rect.left,
-                    y: clientY - rect.top
-                };
+                return { x: clientX - rect.left, y: clientY - rect.top };
             }
 
             function iniciarDibujo(evento) {
@@ -263,26 +130,50 @@
                 ctx.closePath();
             }
 
-            // Eventos para el Ratón
             canvas.addEventListener('mousedown', iniciarDibujo);
             canvas.addEventListener('mousemove', dibujar);
             canvas.addEventListener('mouseup', pararDibujo);
             canvas.addEventListener('mouseleave', pararDibujo);
-
-            // Eventos para Pantallas Táctiles
             canvas.addEventListener('touchstart', iniciarDibujo);
             canvas.addEventListener('touchmove', dibujar);
             canvas.addEventListener('touchend', pararDibujo);
             canvas.addEventListener('touchcancel', pararDibujo);
         }
 
-        // Inicializar ambos canvas cuando el contenido de la página esté cargado
         window.addEventListener('DOMContentLoaded', () => {
             inicializarCanvas('firma_arrendador');
             inicializarCanvas('firma_arrendatario');
         });
 
-    </script>
+        // --- CÓDIGO PARA GENERAR PDF ---
+        function generarPDF() {
+            const elementoParaConvertir = document.getElementById('contrato-form');
+            const botonPDF = document.getElementById('generar-pdf-btn');
+            
+            console.log("Generando PDF...");
+            botonPDF.style.display = 'none';
 
+            html2canvas(elementoParaConvertir, { scale: 2, useCORS: true }).then(canvas => {
+                console.log("Canvas creado. Generando PDF...");
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const imgData = canvas.toDataURL('image/png');
+                const imgProps = doc.getImageProperties(imgData);
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                doc.save('contrato-alquiler-firmado.pdf');
+
+                botonPDF.style.display = 'block';
+                console.log("PDF generado y descarga iniciada.");
+            }).catch(err => {
+                console.error("Error al generar el PDF:", err);
+                botonPDF.style.display = 'block';
+            });
+        }
+
+        document.getElementById('generar-pdf-btn').addEventListener('click', generarPDF);
+    </script>
 </body>
 </html>
