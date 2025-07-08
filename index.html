@@ -7,7 +7,6 @@
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    /* [Todo tu CSS original aquí, sin cambios] */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #f4f7f9;
@@ -108,13 +107,57 @@
   </style>
 </head>
 <body>
-
 <div class="form-container" id="contrato">
   <h1>Formulario de Contrato de Alquiler</h1>
   <form id="rental-form">
-    <!-- Campos del formulario igual que los que has pegado (sin cambios estructurales) -->
-    <!-- [INCLUIR TODO TU FORMULARIO AQUÍ - no repito por espacio, ya está perfecto] -->
-    <!-- ... -->
+    <fieldset>
+      <legend>Datos de las Partes</legend>
+      <label for="arrendador">Nombre del Arrendador:</label>
+      <input type="text" id="arrendador" name="arrendador" placeholder="Nombre completo del propietario" required>
+
+      <label for="arrendatario">Nombre del Arrendatario:</label>
+      <input type="text" id="arrendatario" name="arrendatario" placeholder="Nombre completo del inquilino" required>
+    </fieldset>
+
+    <fieldset>
+      <legend>Detalles del Alquiler</legend>
+      <label for="fecha_inicio">Fecha de Inicio del Alquiler:</label>
+      <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+
+      <label for="fecha_fin">Fecha de Finalización del Alquiler:</label>
+      <input type="date" id="fecha_fin" name="fecha_fin" required>
+
+      <label for="inmueble">Inmueble a alquilar:</label>
+      <select id="inmueble" name="inmueble" required>
+        <option value="" disabled selected>-- Seleccione un inmueble --</option>
+        <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
+        <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
+        <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
+        <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
+        <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
+      </select>
+
+      <label>Motivo de la Estancia:</label>
+      <div class="radio-group">
+        <div>
+          <input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked>
+          <label for="motivo_trabajo">Trabajo</label>
+        </div>
+        <div>
+          <input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio">
+          <label for="motivo_estudio">Estudio</label>
+        </div>
+        <div>
+          <input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar">
+          <label for="motivo_familiar">Visita Familiar</label>
+        </div>
+        <div>
+          <input type="radio" id="motivo_otros" name="motivo_estancia" value="otros">
+          <label for="motivo_otros">Otros</label>
+        </div>
+      </div>
+    </fieldset>
+
     <fieldset>
       <legend>Firmas Digitales</legend>
       <div class="signature-pad">
@@ -155,7 +198,6 @@
       return;
     }
 
-    // Convertimos las firmas en imágenes base64 y las colocamos antes del PDF
     const firma1 = padArrendador.toDataURL();
     const firma2 = padArrendatario.toDataURL();
 
@@ -177,6 +219,5 @@
     }).from(document.getElementById("contrato")).save();
   });
 </script>
-
 </body>
 </html>
