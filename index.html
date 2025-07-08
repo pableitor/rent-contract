@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contrato de Alquiler - Generador PDF</title>
     
-    <!-- Librería para generar el PDF. Es la única que necesitamos. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
@@ -17,217 +16,122 @@
             margin: 0;
             padding: 25px;
         }
-        .form-container {
+        
+        /* ESTE ES EL ELEMENTO QUE CAPTURAREMOS. Ahora es el contenedor principal. */
+        #contenido-pdf {
             max-width: 850px;
-            margin: auto;
+            margin: 0 auto 25px auto; /* Centrado y con espacio abajo */
+            padding: 40px;
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         }
-        #contenido-pdf {
-            padding: 40px;
+
+        /* Contenedor para el botón, para que también esté centrado */
+        .boton-container {
+            max-width: 850px;
+            margin: auto;
         }
-        h1 {
-            text-align: center;
-            color: #1877f2;
-            margin-bottom: 35px;
-            font-weight: 700;
-        }
-        fieldset {
-            border: 1px solid #dddfe2;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 30px;
-            background-color: #fdfdff;
-            page-break-inside: avoid; /* Evita que un fieldset se corte entre páginas del PDF */
-        }
-        legend {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #1877f2;
-            padding: 0 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #606770;
-        }
-        input[type="text"],
-        input[type="date"],
-        select {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ccd0d5;
-            border-radius: 6px;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-            font-size: 1em;
-        }
-        .radio-group div {
-            margin-bottom: 12px;
-        }
-        .radio-group label {
-            display: inline-block;
-            margin-left: 10px;
-            font-weight: normal;
-        }
-        canvas {
-            border: 2px dashed #1877f2;
-            border-radius: 6px;
-            cursor: crosshair;
-            touch-action: none;
-        }
-        .signature-pad {
-            margin-bottom: 20px;
-        }
-        .signature-pad-actions {
-            text-align: right;
-            margin-top: 5px;
-        }
-        button {
-            padding: 10px 18px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-        }
-        button:active {
-            transform: scale(0.98);
-        }
-        .clear-button {
-            background-color: #f5f6f7;
-            color: #4b4f56;
-            border: 1px solid #ccd0d5;
-        }
-        .clear-button:hover {
-            background-color: #e9ebee;
-        }
-        .pdf-button-container {
-            padding: 0 40px 40px 40px;
-        }
-        .generate-pdf-button {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background-color: #25d366;
-            color: white;
-            font-size: 1.25em;
-        }
-        .generate-pdf-button:hover {
-            background-color: #1ebe5a;
-        }
+
+        h1 { text-align: center; color: #1877f2; margin-bottom: 35px; font-weight: 700; }
+        fieldset { border: 1px solid #dddfe2; border-radius: 8px; padding: 25px; margin-bottom: 30px; background-color: #fdfdff; page-break-inside: avoid; }
+        legend { font-size: 1.3em; font-weight: 600; color: #1877f2; padding: 0 15px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #606770; }
+        input[type="text"], input[type="date"], select { width: 100%; padding: 14px; border: 1px solid #ccd0d5; border-radius: 6px; box-sizing: border-box; margin-bottom: 20px; font-size: 1em; }
+        .radio-group div { margin-bottom: 12px; }
+        .radio-group label { display: inline-block; margin-left: 10px; font-weight: normal; }
+        canvas { border: 2px dashed #1877f2; border-radius: 6px; cursor: crosshair; touch-action: none; }
+        .signature-pad { margin-bottom: 20px; }
+        .signature-pad-actions { text-align: right; margin-top: 5px; }
+        button { padding: 10px 18px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background-color 0.2s ease, transform 0.1s ease; }
+        button:active { transform: scale(0.98); }
+        .clear-button { background-color: #f5f6f7; color: #4b4f56; border: 1px solid #ccd0d5; }
+        .clear-button:hover { background-color: #e9ebee; }
+        .generate-pdf-button { display: block; width: 100%; padding: 18px; background-color: #25d366; color: white; font-size: 1.25em; }
+        .generate-pdf-button:hover { background-color: #1ebe5a; }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <!-- Todo lo que está dentro de este div se imprimirá en el PDF -->
-        <div id="contenido-pdf">
-            <h1>Contrato de Alquiler</h1>
-            <form id="contrato-form" onsubmit="return false;">
-                
-                <fieldset>
-                    <legend>Datos de las Partes</legend>
-                    <label for="arrendador_nombre">Nombre del Arrendador:</label>
-                    <input type="text" id="arrendador_nombre" required>
-                    
-                    <label for="arrendador_dni">DNI del Arrendador:</label>
-                    <input type="text" id="arrendador_dni" required>
-                    
-                    <label for="arrendatario_nombre">Nombre del Arrendatario:</label>
-                    <input type="text" id="arrendatario_nombre" required>
-                    
-                    <label for="arrendatario_dni">DNI del Arrendatario:</label>
-                    <input type="text" id="arrendatario_dni" required>
-                </fieldset>
-                
-                <fieldset>
-                    <legend>Detalles del Alquiler</legend>
-                    <label for="fecha_inicio">Fecha de Inicio:</label>
-                    <input type="date" id="fecha_inicio" required>
-                    
-                    <label for="fecha_fin">Fecha de Finalización:</label>
-                    <input type="date" id="fecha_fin" required>
-                    
-                    <label for="inmueble">Inmueble a alquilar:</label>
-                    <select id="inmueble" required>
-                        <option value="" disabled selected>-- Seleccione un inmueble --</option>
-                        <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
-                        <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
-                        <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
-                        <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
-                        <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
-                    </select>
-                    
-                    <label>Motivo de la Estancia:</label>
-                    <div class="radio-group">
-                        <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked><label for="motivo_trabajo">Trabajo</label></div>
-                        <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio"><label for="motivo_estudio">Estudio</label></div>
-                        <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar"><label for="motivo_familiar">Visita Familiar</label></div>
-                        <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
-                    </div>
-                </fieldset>
-                
-                <fieldset>
-                    <legend>Firmas Digitales</legend>
-                    <div class="signature-pad">
-                        <label>Firma del Arrendador:</label>
-                        <canvas id="firma_arrendador" width="750" height="200"></canvas>
-                        <!-- Imagen temporal oculta para la firma -->
-                        <img id="img_firma_arrendador" style="display: none; border: 2px dashed #1877f2; width: 750px; height: 200px;">
-                        <div class="signature-pad-actions">
-                            <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button>
-                        </div>
-                    </div>
-                    <div class="signature-pad">
-                        <label>Firma del Arrendatario:</label>
-                        <canvas id="firma_arrendatario" width="750" height="200"></canvas>
-                        <!-- Imagen temporal oculta para la firma -->
-                        <img id="img_firma_arrendatario" style="display: none; border: 2px dashed #1877f2; width: 750px; height: 200px;">
-                        <div class="signature-pad-actions">
-                            <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-        
-        <!-- El botón para generar el PDF está fuera del div que se imprime -->
-        <div class="pdf-button-container">
-            <button id="generar-pdf-btn" class="generate-pdf-button">Generar y Guardar PDF</button>
-        </div>
+    <!-- Este div contiene TODO lo que se va a imprimir. Es el único elemento que pasaremos a la librería. -->
+    <div id="contenido-pdf">
+        <h1>Contrato de Alquiler</h1>
+        <form id="contrato-form" onsubmit="return false;">
+            <fieldset>
+                <legend>Datos de las Partes</legend>
+                <label for="arrendador_nombre">Nombre del Arrendador:</label>
+                <input type="text" id="arrendador_nombre" required>
+                <label for="arrendador_dni">DNI del Arrendador:</label>
+                <input type="text" id="arrendador_dni" required>
+                <label for="arrendatario_nombre">Nombre del Arrendatario:</label>
+                <input type="text" id="arrendatario_nombre" required>
+                <label for="arrendatario_dni">DNI del Arrendatario:</label>
+                <input type="text" id="arrendatario_dni" required>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Detalles del Alquiler</legend>
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" id="fecha_inicio" required>
+                <label for="fecha_fin">Fecha de Finalización:</label>
+                <input type="date" id="fecha_fin" required>
+                <label for="inmueble">Inmueble a alquilar:</label>
+                <select id="inmueble" required>
+                    <option value="" disabled selected>-- Seleccione un inmueble --</option>
+                    <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
+                    <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
+                    <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
+                    <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
+                    <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
+                </select>
+                <label>Motivo de la Estancia:</label>
+                <div class="radio-group">
+                    <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked><label for="motivo_trabajo">Trabajo</label></div>
+                    <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio"><label for="motivo_estudio">Estudio</label></div>
+                    <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar"><label for="motivo_familiar">Visita Familiar</label></div>
+                    <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Firmas Digitales</legend>
+                <div class="signature-pad">
+                    <label>Firma del Arrendador:</label>
+                    <canvas id="firma_arrendador" width="750" height="200"></canvas>
+                    <img id="img_firma_arrendador" style="display: none; border: 2px dashed #1877f2; width: 750px; height: 200px;">
+                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button></div>
+                </div>
+                <div class="signature-pad">
+                    <label>Firma del Arrendatario:</label>
+                    <canvas id="firma_arrendatario" width="750" height="200"></canvas>
+                    <img id="img_firma_arrendatario" style="display: none; border: 2px dashed #1877f2; width: 750px; height: 200px;">
+                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button></div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    
+    <!-- El botón está FUERA del div que se imprime, en su propio contenedor centrado. -->
+    <div class="boton-container">
+        <button id="generar-pdf-btn" class="generate-pdf-button">Generar y Guardar PDF</button>
     </div>
 
     <script>
-        // Función para limpiar un canvas específico
+        // El JavaScript no necesita cambios, ya que la lógica es correcta. 
+        // El problema era 100% de estructura HTML/CSS.
         function limpiarCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-
-        // Función para inicializar la lógica de dibujo en un canvas
         function inicializarCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             let dibujando = false;
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#000000';
-
-            function getPosicion(e) {
-                const rect = canvas.getBoundingClientRect();
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
-                return { x: clientX - rect.left, y: clientY - rect.top };
-            }
+            ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#000000';
+            function getPosicion(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.clientX || e.touches[0].clientX; const clientY = e.clientY || e.touches[0].clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
             function iniciarDibujo(e) { e.preventDefault(); dibujando = true; const pos = getPosicion(e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
             function dibujar(e) { if (!dibujando) return; e.preventDefault(); const pos = getPosicion(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
             function pararDibujo(e) { if (!dibujando) return; e.preventDefault(); dibujando = false; ctx.closePath(); }
-
-            // Eventos para Ratón y Pantallas Táctiles
             canvas.addEventListener('mousedown', iniciarDibujo);
             canvas.addEventListener('mousemove', dibujar);
             canvas.addEventListener('mouseup', pararDibujo);
@@ -238,43 +142,32 @@
             canvas.addEventListener('touchcancel', pararDibujo);
         }
 
-        // Función para generar el PDF con la técnica de la imagen temporal
         function generarPDF() {
             const botonPDF = document.getElementById('generar-pdf-btn');
             const elementoParaConvertir = document.getElementById('contenido-pdf');
-            
-            // Referencias a los canvas y a las imágenes temporales
             const canvasArrendador = document.getElementById('firma_arrendador');
             const canvasArrendatario = document.getElementById('firma_arrendatario');
             const imgArrendador = document.getElementById('img_firma_arrendador');
             const imgArrendatario = document.getElementById('img_firma_arrendatario');
 
-            // --- INICIO DEL PROCESO ---
-            // 1. Ocultar el botón para que no aparezca en el PDF
             botonPDF.style.display = 'none';
 
-            // 2. Realizar el "truco": convertir canvas a imagen y reemplazar
             imgArrendador.src = canvasArrendador.toDataURL('image/png');
             imgArrendatario.src = canvasArrendatario.toDataURL('image/png');
-            
             canvasArrendador.style.display = 'none';
             canvasArrendatario.style.display = 'none';
             imgArrendador.style.display = 'block';
             imgArrendatario.style.display = 'block';
 
-            // 3. Opciones de configuración para html2pdf
             const opt = {
               margin:       10,
               filename:     'contrato-de-alquiler.pdf',
               image:        { type: 'jpeg', quality: 0.98 },
-              html2canvas:  { scale: 2, useCORS: true },
+              html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
               jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // 4. Llamar a html2pdf para generar y guardar el documento
             html2pdf().from(elementoParaConvertir).set(opt).save().then(() => {
-                // --- FIN DEL PROCESO ---
-                // 5. Revertir los cambios para que la página vuelva a la normalidad
                 canvasArrendador.style.display = 'block';
                 canvasArrendatario.style.display = 'block';
                 imgArrendador.style.display = 'none';
@@ -283,7 +176,6 @@
             });
         }
 
-        // Se ejecuta cuando el contenido de la página se ha cargado
         window.addEventListener('DOMContentLoaded', () => {
             inicializarCanvas('firma_arrendador');
             inicializarCanvas('firma_arrendatario');
