@@ -104,6 +104,9 @@
     .submit-button:hover {
       background-color: #27ae60;
     }
+    .oculto {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -113,21 +116,40 @@
     <div id="contrato">
       <fieldset>
         <legend>Datos de las Partes</legend>
+        <p><strong>Arrendador:</strong> <span id="txt-arrendador"></span></p>
+        <p><strong>Arrendatario:</strong> <span id="txt-arrendatario"></span></p>
+      </fieldset>
+      <fieldset>
+        <legend>Detalles del Alquiler</legend>
+        <p><strong>Fecha de Inicio:</strong> <span id="txt-inicio"></span></p>
+        <p><strong>Fecha de Finalización:</strong> <span id="txt-fin"></span></p>
+        <p><strong>Inmueble:</strong> <span id="txt-inmueble"></span></p>
+        <p><strong>Motivo:</strong> <span id="txt-motivo"></span></p>
+      </fieldset>
+      <fieldset>
+        <legend>Firmas Digitales</legend>
+        <p><strong>Firma del Arrendador:</strong></p>
+        <img id="img-firma-arrendador" style="max-width: 100%;" />
+        <p><strong>Firma del Arrendatario:</strong></p>
+        <img id="img-firma-arrendatario" style="max-width: 100%;" />
+      </fieldset>
+    </div>
+
+    <!-- CAMPOS DE FORMULARIO PARA USO INTERACTIVO -->
+    <div id="formulario-activo">
+      <fieldset>
+        <legend>Datos de las Partes</legend>
         <label for="arrendador">Nombre del Arrendador:</label>
         <input type="text" id="arrendador" name="arrendador" placeholder="Nombre completo del propietario" required>
-
         <label for="arrendatario">Nombre del Arrendatario:</label>
         <input type="text" id="arrendatario" name="arrendatario" placeholder="Nombre completo del inquilino" required>
       </fieldset>
-
       <fieldset>
         <legend>Detalles del Alquiler</legend>
         <label for="fecha_inicio">Fecha de Inicio del Alquiler:</label>
         <input type="date" id="fecha_inicio" name="fecha_inicio" required>
-
         <label for="fecha_fin">Fecha de Finalización del Alquiler:</label>
         <input type="date" id="fecha_fin" name="fecha_fin" required>
-
         <label for="inmueble">Inmueble a alquilar:</label>
         <select id="inmueble" name="inmueble" required>
           <option value="" disabled selected>-- Seleccione un inmueble --</option>
@@ -137,28 +159,18 @@
           <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
           <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
         </select>
-
         <label>Motivo de la Estancia:</label>
         <div class="radio-group">
-          <div>
-            <input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked>
-            <label for="motivo_trabajo">Trabajo</label>
-          </div>
-          <div>
-            <input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio">
-            <label for="motivo_estudio">Estudio</label>
-          </div>
-          <div>
-            <input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar">
-            <label for="motivo_familiar">Visita Familiar</label>
-          </div>
-          <div>
-            <input type="radio" id="motivo_otros" name="motivo_estancia" value="otros">
-            <label for="motivo_otros">Otros</label>
-          </div>
+          <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="Trabajo" checked>
+            <label for="motivo_trabajo">Trabajo</label></div>
+          <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="Estudio">
+            <label for="motivo_estudio">Estudio</label></div>
+          <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="Visita Familiar">
+            <label for="motivo_familiar">Visita Familiar</label></div>
+          <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="Otros">
+            <label for="motivo_otros">Otros</label></div>
         </div>
       </fieldset>
-
       <fieldset>
         <legend>Firmas Digitales</legend>
         <div class="signature-pad">
@@ -181,46 +193,51 @@
   </form>
 </div>
 <script>
-  const canvasArrendador = document.getElementById("firma_arrendador");
-  const canvasArrendatario = document.getElementById("firma_arrendatario");
-  const padArrendador = new SignaturePad(canvasArrendador);
-  const padArrendatario = new SignaturePad(canvasArrendatario);
+const canvasArrendador = document.getElementById("firma_arrendador");
+const canvasArrendatario = document.getElementById("firma_arrendatario");
+const padArrendador = new SignaturePad(canvasArrendador);
+const padArrendatario = new SignaturePad(canvasArrendatario);
 
-  function limpiarCanvas(id) {
-    if (id === "firma_arrendador") padArrendador.clear();
-    else if (id === "firma_arrendatario") padArrendatario.clear();
+function limpiarCanvas(id) {
+  if (id === "firma_arrendador") padArrendador.clear();
+  else if (id === "firma_arrendatario") padArrendatario.clear();
+}
+
+document.getElementById("rental-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  if (padArrendador.isEmpty() || padArrendatario.isEmpty()) {
+    alert("Por favor, firma ambos campos antes de generar el PDF.");
+    return;
   }
 
-  document.getElementById("rental-form").addEventListener("submit", function (e) {
-    e.preventDefault();
+  document.getElementById("txt-arrendador").textContent = document.getElementById("arrendador").value;
+  document.getElementById("txt-arrendatario").textContent = document.getElementById("arrendatario").value;
+  document.getElementById("txt-inicio").textContent = document.getElementById("fecha_inicio").value;
+  document.getElementById("txt-fin").textContent = document.getElementById("fecha_fin").value;
+  document.getElementById("txt-inmueble").textContent = document.getElementById("inmueble").selectedOptions[0].text;
 
-    if (padArrendador.isEmpty() || padArrendatario.isEmpty()) {
-      alert("Por favor, firma ambos campos antes de generar el PDF.");
-      return;
-    }
+  const motivo = document.querySelector('input[name="motivo_estancia"]:checked');
+  document.getElementById("txt-motivo").textContent = motivo ? motivo.value : "";
 
-    const firma1 = padArrendador.toDataURL();
-    const firma2 = padArrendatario.toDataURL();
+  const firma1 = padArrendador.toDataURL();
+  const firma2 = padArrendatario.toDataURL();
+  document.getElementById("img-firma-arrendador").src = firma1;
+  document.getElementById("img-firma-arrendatario").src = firma2;
 
-    const img1 = new Image();
-    img1.src = firma1;
-    img1.style.maxWidth = "100%";
-    canvasArrendador.parentNode.replaceChild(img1, canvasArrendador);
+  document.getElementById("formulario-activo").style.display = "none";
 
-    const img2 = new Image();
-    img2.src = firma2;
-    img2.style.maxWidth = "100%";
-    canvasArrendatario.parentNode.replaceChild(img2, canvasArrendatario);
-
-    setTimeout(() => {
-      html2pdf().set({
-        margin: 0.5,
-        filename: 'contrato_alquiler.pdf',
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      }).from(document.getElementById("contrato")).save();
-    }, 500);
-  });
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 0.5,
+      filename: 'contrato_alquiler.pdf',
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(document.getElementById("contrato")).save().then(() => {
+      document.getElementById("formulario-activo").style.display = "block";
+    });
+  }, 300);
+});
 </script>
 </body>
 </html>
