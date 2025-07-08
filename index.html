@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contrato de Alquiler - Generador PDF</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- LIBRERÍAS DEL SCRIPT QUE FUNCIONA -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; line-height: 1.6; margin: 0; padding: 25px; }
+        
+        /* Contenedor que se va a imprimir */
         #contenido-pdf { max-width: 850px; margin: 0 auto 25px auto; padding: 40px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); }
         .boton-container { max-width: 850px; margin: auto; }
+
         h1 { text-align: center; color: #1877f2; margin-bottom: 35px; font-weight: 700; }
         fieldset { border: 1px solid #dddfe2; border-radius: 8px; padding: 25px; margin-bottom: 30px; background-color: #fdfdff; page-break-inside: avoid; }
         legend { font-size: 1.3em; font-weight: 600; color: #1877f2; padding: 0 15px; }
@@ -18,7 +23,10 @@
         input[type="text"], input[type="date"], select { width: 100%; padding: 14px; border: 1px solid #ccd0d5; border-radius: 6px; box-sizing: border-box; margin-bottom: 20px; font-size: 1em; }
         .radio-group div { margin-bottom: 12px; }
         .radio-group label { display: inline-block; margin-left: 10px; font-weight: normal; }
-        canvas { border: 2px dashed #1877f2; border-radius: 6px; cursor: crosshair; touch-action: none; }
+        
+        /* Estilos para el canvas de SignaturePad */
+        canvas { border: 2px dashed #1877f2; border-radius: 6px; width: 100%; height: 200px; }
+        
         .signature-pad { margin-bottom: 20px; }
         .signature-pad-actions { text-align: right; margin-top: 5px; }
         button { padding: 10px 18px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background-color 0.2s ease, transform 0.1s ease; }
@@ -30,9 +38,11 @@
     </style>
 </head>
 <body>
+    <!-- MI ESTRUCTURA HTML PARA EL FORMULARIO -->
     <div id="contenido-pdf">
         <h1>Contrato de Alquiler</h1>
         <form id="contrato-form" onsubmit="return false;">
+            
             <fieldset>
                 <legend>Datos de las Partes</legend>
                 <label for="arrendador_nombre">Nombre del Arrendador:</label>
@@ -44,6 +54,7 @@
                 <label for="arrendatario_dni">DNI del Arrendatario:</label>
                 <input type="text" id="arrendatario_dni" required>
             </fieldset>
+            
             <fieldset>
                 <legend>Detalles del Alquiler</legend>
                 <label for="fecha_inicio">Fecha de Inicio:</label>
@@ -67,117 +78,97 @@
                     <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
                 </div>
             </fieldset>
+            
             <fieldset>
                 <legend>Firmas Digitales</legend>
                 <div class="signature-pad">
                     <label>Firma del Arrendador:</label>
-                    <canvas id="firma_arrendador" width="750" height="200"></canvas>
-                    <img id="img_firma_arrendador" style="display: none; border: 2px dashed #1877f2; width: 750px; height: 200px;">
-                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button></div>
+                    <!-- ID cambiado para coincidir con el script funcional -->
+                    <canvas id="firmaPropietario"></canvas>
+                    <div class="signature-pad-actions">
+                        <button type="button" class="clear-button" onclick="borrarFirma('propietario')">Limpiar Firma</button>
+                    </div>
                 </div>
                 <div class="signature-pad">
                     <label>Firma del Arrendatario:</label>
-                    <canvas id="firma_arrendatario" width="750" height="200"></canvas>
-                    <img id="img_firma_arrendatario" style="display: none; border: 2px dashed #1877f2; width: 750px; height: 200px;">
-                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button></div>
+                    <!-- ID cambiado para coincidir con el script funcional -->
+                    <canvas id="firmaInquilino"></canvas>
+                    <div class="signature-pad-actions">
+                        <button type="button" class="clear-button" onclick="borrarFirma('inquilino')">Limpiar Firma</button>
+                    </div>
                 </div>
             </fieldset>
         </form>
     </div>
     
     <div class="boton-container">
-        <button id="generar-pdf-btn" class="generate-pdf-button">Generar y Guardar PDF</button>
+        <!-- El botón llama a la función del script funcional -->
+        <button id="generar-pdf-btn" class="generate-pdf-button" onclick="generarYDescargarPDF()">Generar y Guardar PDF</button>
     </div>
 
+    <!-- EL JAVASCRIPT DE TU SCRIPT FUNCIONAL, ADAPTADO -->
     <script>
-        function limpiarCanvas(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        function inicializarCanvas(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            const ctx = canvas.getContext('2d');
-            let dibujando = false;
-            ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#000000';
-            function getPosicion(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.clientX || e.touches[0].clientX; const clientY = e.clientY || e.touches[0].clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
-            function iniciarDibujo(e) { e.preventDefault(); dibujando = true; const pos = getPosicion(e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
-            function dibujar(e) { if (!dibujando) return; e.preventDefault(); const pos = getPosicion(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
-            function pararDibujo(e) { if (!dibujando) return; e.preventDefault(); dibujando = false; ctx.closePath(); }
-            canvas.addEventListener('mousedown', iniciarDibujo);
-            canvas.addEventListener('mousemove', dibujar);
-            canvas.addEventListener('mouseup', pararDibujo);
-            canvas.addEventListener('mouseleave', pararDibujo);
-            canvas.addEventListener('touchstart', iniciarDibujo);
-            canvas.addEventListener('touchmove', dibujar);
-            canvas.addEventListener('touchend', pararDibujo);
-            canvas.addEventListener('touchcancel', pararDibujo);
-        }
+        // 1. Inicialización de los pads de firma (la clave del éxito)
+        const canvasProp = document.getElementById("firmaPropietario");
+        const canvasInq = document.getElementById("firmaInquilino");
+        const padProp = new SignaturePad(canvasProp);
+        const padInq = new SignaturePad(canvasInq);
 
-        function generarPDF() {
-            const botonPDF = document.getElementById('generar-pdf-btn');
-            const elementoParaConvertir = document.getElementById('contenido-pdf');
-            const canvasArrendador = document.getElementById('firma_arrendador');
-            const canvasArrendatario = document.getElementById('firma_arrendatario');
-            const imgArrendador = document.getElementById('img_firma_arrendador');
-            const imgArrendatario = document.getElementById('img_firma_arrendatario');
-
-            botonPDF.style.display = 'none';
-            canvasArrendador.style.display = 'none';
-            canvasArrendatario.style.display = 'none';
-            imgArrendador.style.display = 'block';
-            imgArrendatario.style.display = 'block';
-
-            let imagenesCargadas = 0;
-            const totalImagenes = 2;
-
-            const procederConPDF = () => {
-                console.log("Ambas firmas cargadas. Procediendo a generar el PDF...");
-                const opt = {
-                  margin:       10,
-                  filename:     'contrato-de-alquiler-final.pdf',
-                  image:        { type: 'jpeg', quality: 0.98 },
-                  html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-                html2pdf().from(elementoParaConvertir).set(opt).save().then(() => {
-                    canvasArrendador.style.display = 'block';
-                    canvasArrendatario.style.display = 'block';
-                    imgArrendador.style.display = 'none';
-                    imgArrendatario.style.display = 'none';
-                    botonPDF.style.display = 'block';
-                    console.log("PDF generado. Vista restaurada.");
-                });
-            };
-            
-            const verificarCarga = () => {
-                imagenesCargadas++;
-                if (imagenesCargadas === totalImagenes) {
-                    procederConPDF();
-                }
-            };
-
-            imgArrendador.onload = verificarCarga;
-            imgArrendatario.onload = verificarCarga;
-
-            imgArrendador.src = canvasArrendador.toDataURL('image/png');
-            imgArrendatario.src = canvasArrendatario.toDataURL('image/png');
-
-            // Pequeño truco por si un canvas está vacío, ya que `onload` podría no dispararse.
-            const canvasVacioDataURL = document.createElement('canvas').toDataURL();
-            if (canvasArrendador.toDataURL() === canvasVacioDataURL) {
-                imgArrendador.onload();
-            }
-            if (canvasArrendatario.toDataURL() === canvasVacioDataURL) {
-                imgArrendatario.onload();
+        // 2. Función para borrar las firmas
+        function borrarFirma(tipo) {
+            if (tipo === 'propietario') {
+                padProp.clear();
+            } else {
+                padInq.clear();
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            inicializarCanvas('firma_arrendador');
-            inicializarCanvas('firma_arrendatario');
-            document.getElementById('generar-pdf-btn').addEventListener('click', generarPDF);
-        });
+        // 3. Función principal para generar y descargar el PDF
+        function generarYDescargarPDF() {
+            // Comprobamos si ambas firmas están puestas
+            if (padProp.isEmpty() || padInq.isEmpty()) {
+                alert("Por favor, ambas partes deben firmar el contrato.");
+                return;
+            }
+
+            // Elemento que vamos a convertir a PDF
+            const elementoParaConvertir = document.getElementById("contenido-pdf");
+            // Seleccionamos los botones de limpiar para ocultarlos
+            const botonesLimpiar = document.querySelectorAll('.clear-button');
+
+            // Ocultamos los botones de limpiar para que no salgan en el PDF
+            botonesLimpiar.forEach(boton => boton.style.display = 'none');
+
+            // Opciones para html2pdf
+            const opt = {
+                margin: 10,
+                filename: 'contrato-alquiler-firmado.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Usamos la lógica de tu script: generar PDF como datauristring y crear un enlace de descarga
+            html2pdf().set(opt).from(elementoParaConvertir).outputPdf('datauristring').then(function (pdfBase64) {
+                // Una vez generado, volvemos a mostrar los botones de limpiar
+                botonesLimpiar.forEach(boton => boton.style.display = 'inline-block');
+                
+                // Creamos un enlace de descarga invisible y lo "clickamos"
+                const downloadLink = document.createElement('a');
+                downloadLink.href = pdfBase64;
+                downloadLink.download = "contrato-alquiler-firmado.pdf";
+                document.body.appendChild(downloadLink); // Necesario para Firefox
+                downloadLink.click();
+                document.body.removeChild(downloadLink); // Limpiamos el DOM
+
+                alert("✅ PDF generado. La descarga debería comenzar en breve.");
+            }).catch(err => {
+                // En caso de error, también mostramos los botones
+                botonesLimpiar.forEach(boton => boton.style.display = 'inline-block');
+                console.error("Error al generar el PDF:", err);
+                alert("❌ Ocurrió un error al generar el PDF.");
+            });
+        }
     </script>
 </body>
 </html>
