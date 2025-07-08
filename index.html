@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Contrato de Alquiler</title>
-    
-    <!-- NUEVA LIBRERÍA: html2pdf.js (reemplaza a las dos anteriores) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; line-height: 1.6; margin: 0; padding: 20px; }
         .form-container { max-width: 800px; margin: 20px auto; padding: 30px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
@@ -18,7 +15,7 @@
         input[type="text"], input[type="date"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-bottom: 15px; font-size: 1em; }
         .radio-group div { margin-bottom: 10px; }
         .radio-group label { display: inline-block; margin-left: 8px; font-weight: normal; }
-        canvas { border: 2px dashed #007bff; border-radius: 5px; cursor: crosshair; touch-action: none; background-color: #ffffff !important; /* Aseguramos fondo blanco */ }
+        canvas { border: 2px dashed #007bff; border-radius: 5px; cursor: crosshair; touch-action: none; background-color: #ffffff !important; }
         .signature-pad { margin-bottom: 20px; }
         .signature-pad-actions { text-align: right; margin-top: -10px; }
         button { padding: 10px 15px; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background-color 0.3s ease; }
@@ -29,9 +26,7 @@
     </style>
 </head>
 <body>
-
     <div class="form-container">
-        <!-- El div que contiene todo lo que se va a imprimir -->
         <div id="contenido-pdf">
             <h1>Contrato de Alquiler</h1>
             <form id="contrato-form" onsubmit="return false;">
@@ -70,17 +65,18 @@
                     <div class="signature-pad">
                         <label for="firma_arrendador">Firma del Arrendador:</label>
                         <canvas id="firma_arrendador" width="700" height="200"></canvas>
+                        <img id="img_firma_arrendador" style="display: none; border: 2px dashed #007bff; width: 700px; height: 200px;">
                         <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button></div>
                     </div>
                     <div class="signature-pad">
                         <label for="firma_arrendatario">Firma del Arrendatario:</label>
                         <canvas id="firma_arrendatario" width="700" height="200"></canvas>
+                        <img id="img_firma_arrendatario" style="display: none; border: 2px dashed #007bff; width: 700px; height: 200px;">
                         <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button></div>
                     </div>
                 </fieldset>
             </form>
         </div>
-        <!-- El botón ahora está fuera del div que se imprime -->
         <button id="generar-pdf-btn" class="submit-button">Firmar y Generar PDF</button>
     </div>
 
@@ -90,7 +86,6 @@
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-
         function inicializarCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -116,32 +111,46 @@
             canvas.addEventListener('touchend', pararDibujo);
             canvas.addEventListener('touchcancel', pararDibujo);
         }
-
         window.addEventListener('DOMContentLoaded', () => {
             inicializarCanvas('firma_arrendador');
             inicializarCanvas('firma_arrendatario');
             document.getElementById('generar-pdf-btn').addEventListener('click', generarPDF);
         });
 
-        // --- FUNCIÓN DEFINITIVA CON html2pdf.js ---
+        // --- FUNCIÓN FINAL Y A PRUEBA DE BALAS ---
         function generarPDF() {
             const elementoParaConvertir = document.getElementById('contenido-pdf');
             const botonPDF = document.getElementById('generar-pdf-btn');
+            const canvasArrendador = document.getElementById('firma_arrendador');
+            const canvasArrendatario = document.getElementById('firma_arrendatario');
+            const imgArrendador = document.getElementById('img_firma_arrendador');
+            const imgArrendatario = document.getElementById('img_firma_arrendatario');
 
-            console.log("Generando PDF con html2pdf.js...");
             botonPDF.style.display = 'none';
 
+            imgArrendador.src = canvasArrendador.toDataURL('image/png');
+            imgArrendatario.src = canvasArrendatario.toDataURL('image/png');
+            
+            canvasArrendador.style.display = 'none';
+            canvasArrendatario.style.display = 'none';
+            imgArrendador.style.display = 'block';
+            imgArrendatario.style.display = 'block';
+
             const opt = {
-              margin:       15,
+              margin:       10,
               filename:     'contrato-alquiler-firmado.pdf',
               image:        { type: 'jpeg', quality: 0.98 },
               html2canvas:  { scale: 2, useCORS: true },
               jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            
+
             html2pdf().from(elementoParaConvertir).set(opt).save().then(() => {
+                canvasArrendador.style.display = 'block';
+                canvasArrendatario.style.display = 'block';
+                imgArrendador.style.display = 'none';
+                imgArrendatario.style.display = 'none';
                 botonPDF.style.display = 'block';
-                console.log("PDF generado y guardado correctamente.");
+                console.log("PDF generado y la vista ha sido restaurada.");
             });
         }
     </script>
