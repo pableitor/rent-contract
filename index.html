@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Contrato de Alquiler</title>
     
+    <!-- LIBRERÍAS PARA GENERAR PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -32,96 +33,156 @@
 
     <div class="form-container">
         <h1>Formulario de Contrato de Alquiler</h1>
-        <!-- Es mejor que el formulario no se envíe, por eso el onsubmit="return false;" -->
-        <form id="contrato-form" onsubmit="return false;">
-            <!-- ... todo el contenido del formulario idéntico a antes ... -->
-            <fieldset>
-                <legend>Datos de las Partes</legend>
-                <label for="arrendador">Nombre del Arrendador:</label>
-                <input type="text" id="arrendador" name="arrendador" placeholder="Nombre completo del propietario" required>
-                <label for="arrendatario">Nombre del Arrendatario:</label>
-                <input type="text" id="arrendatario" name="arrendatario" placeholder="Nombre completo del inquilino" required>
-            </fieldset>
-            <fieldset>
-                <legend>Detalles del Alquiler</legend>
-                <label for="fecha_inicio">Fecha de Inicio del Alquiler:</label>
-                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
-                <label for="fecha_fin">Fecha de Finalización del Alquiler:</label>
-                <input type="date" id="fecha_fin" name="fecha_fin" required>
-                <label for="inmueble">Inmueble a alquilar:</label>
-                <select id="inmueble" name="inmueble" required>
-                    <option value="" disabled selected>-- Seleccione un inmueble --</option>
-                    <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
-                    <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
-                    <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
-                    <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
-                    <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
-                </select>
-                <label>Motivo de la Estancia:</label>
-                <div class="radio-group">
-                    <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked><label for="motivo_trabajo">Trabajo</label></div>
-                    <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio"><label for="motivo_estudio">Estudio</label></div>
-                    <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar"><label for="motivo_familiar">Visita Familiar</label></div>
-                    <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>Firmas Digitales</legend>
-                <div class="signature-pad">
-                    <label for="firma_arrendador">Firma del Arrendador:</label>
-                    <canvas id="firma_arrendador" width="700" height="200"></canvas>
-                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button></div>
-                </div>
-                <div class="signature-pad">
-                    <label for="firma_arrendatario">Firma del Arrendatario:</label>
-                    <canvas id="firma_arrendatario" width="700" height="200"></canvas>
-                    <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button></div>
-                </div>
-            </fieldset>
-        </form>
+        <!-- Le damos un ID al contenedor que queremos imprimir, en lugar de al form -->
+        <div id="contenido-pdf">
+            <form id="contrato-form" onsubmit="return false;">
+
+                <fieldset>
+                    <legend>Datos de las Partes</legend>
+                    <label for="arrendador">Nombre del Arrendador:</label>
+                    <input type="text" id="arrendador" name="arrendador" placeholder="Nombre completo del propietario" required>
+                    <label for="arrendatario">Nombre del Arrendatario:</label>
+                    <input type="text" id="arrendatario" name="arrendatario" placeholder="Nombre completo del inquilino" required>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Detalles del Alquiler</legend>
+                    <label for="fecha_inicio">Fecha de Inicio del Alquiler:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+                    <label for="fecha_fin">Fecha de Finalización del Alquiler:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" required>
+                    <label for="inmueble">Inmueble a alquilar:</label>
+                    <select id="inmueble" name="inmueble" required>
+                        <option value="" disabled selected>-- Seleccione un inmueble --</option>
+                        <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
+                        <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
+                        <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
+                        <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
+                        <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
+                    </select>
+                    <label>Motivo de la Estancia:</label>
+                    <div class="radio-group">
+                        <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked><label for="motivo_trabajo">Trabajo</label></div>
+                        <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio"><label for="motivo_estudio">Estudio</label></div>
+                        <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar"><label for="motivo_familiar">Visita Familiar</label></div>
+                        <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Firmas Digitales</legend>
+                    <div class="signature-pad">
+                        <label for="firma_arrendador">Firma del Arrendador:</label>
+                        <canvas id="firma_arrendador" width="700" height="200"></canvas>
+                        <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button></div>
+                    </div>
+                    <div class="signature-pad">
+                        <label for="firma_arrendatario">Firma del Arrendatario:</label>
+                        <canvas id="firma_arrendatario" width="700" height="200"></canvas>
+                        <div class="signature-pad-actions"><button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button></div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
         <button id="generar-pdf-btn" class="submit-button">Firmar y Generar PDF</button>
     </div>
 
     <script>
-        // --- CÓDIGO DE CANVAS (SIN CAMBIOS) ---
-        function limpiarCanvas(canvasId) { const canvas = document.getElementById(canvasId); const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); }
-        function inicializarCanvas(canvasId) { const canvas = document.getElementById(canvasId); const ctx = canvas.getContext('2d'); let dibujando = false; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000000'; function getPosicion(e) { const rect = canvas.getBoundingClientRect(); const clientX = e.clientX || e.touches[0].clientX; const clientY = e.clientY || e.touches[0].clientY; return { x: clientX - rect.left, y: clientY - rect.top }; } function iniciarDibujo(e) { e.preventDefault(); dibujando = true; const pos = getPosicion(e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); } function dibujar(e) { if (!dibujando) return; e.preventDefault(); const pos = getPosicion(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); } function pararDibujo(e) { if (!dibujando) return; e.preventDefault(); dibujando = false; ctx.closePath(); } canvas.addEventListener('mousedown', iniciarDibujo); canvas.addEventListener('mousemove', dibujar); canvas.addEventListener('mouseup', pararDibujo); canvas.addEventListener('mouseleave', pararDibujo); canvas.addEventListener('touchstart', iniciarDibujo); canvas.addEventListener('touchmove', dibujar); canvas.addEventListener('touchend', pararDibujo); canvas.addEventListener('touchcancel', pararDibujo); }
-        window.addEventListener('DOMContentLoaded', () => { inicializarCanvas('firma_arrendador'); inicializarCanvas('firma_arrendatario'); document.getElementById('generar-pdf-btn').addEventListener('click', generarPDF); });
+        function limpiarCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
 
-        // --- CÓDIGO CORREGIDO PARA GENERAR PDF MULTIPÁGINA ---
+        function inicializarCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            let dibujando = false;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000000';
+
+            function getPosicion(evento) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = evento.clientX || evento.touches[0].clientX;
+                const clientY = evento.clientY || evento.touches[0].clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            function iniciarDibujo(evento) {
+                evento.preventDefault();
+                dibujando = true;
+                const pos = getPosicion(evento);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+
+            function dibujar(evento) {
+                if (!dibujando) return;
+                evento.preventDefault();
+                const pos = getPosicion(evento);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+
+            function pararDibujo(evento) {
+                if (!dibujando) return;
+                evento.preventDefault();
+                dibujando = false;
+                ctx.closePath();
+            }
+
+            canvas.addEventListener('mousedown', iniciarDibujo);
+            canvas.addEventListener('mousemove', dibujar);
+            canvas.addEventListener('mouseup', pararDibujo);
+            canvas.addEventListener('mouseleave', pararDibujo);
+            canvas.addEventListener('touchstart', iniciarDibujo);
+            canvas.addEventListener('touchmove', dibujar);
+            canvas.addEventListener('touchend', pararDibujo);
+            canvas.addEventListener('touchcancel', pararDibujo);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarCanvas('firma_arrendador');
+            inicializarCanvas('firma_arrendatario');
+        });
+
+        // --- CÓDIGO PARA GENERAR PDF ---
         function generarPDF() {
-            const elementoParaConvertir = document.getElementById('contrato-form');
+            // Seleccionamos el contenedor del contenido para el PDF
+            const elementoParaConvertir = document.getElementById('contenido-pdf'); 
             const botonPDF = document.getElementById('generar-pdf-btn');
-            botonPDF.style.display = 'none';
+            
+            console.log("Generando PDF...");
+            botonPDF.style.display = 'none'; // Ocultamos el botón
 
-            html2canvas(elementoParaConvertir, { scale: 2, useCORS: true }).then(canvas => {
+            // La llamada a html2canvas con las opciones corregidas
+            html2canvas(elementoParaConvertir, {
+                scale: 2,
+                useCORS: true,
+                windowHeight: elementoParaConvertir.scrollHeight,
+                scrollY: -window.scrollY
+            }).then(canvas => {
+                console.log("Canvas creado. Generando PDF...");
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
                 const imgData = canvas.toDataURL('image/png');
-                const pdfWidth = doc.internal.pageSize.getWidth();
-                const pdfHeight = doc.internal.pageSize.getHeight();
                 const imgProps = doc.getImageProperties(imgData);
-                const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                let alturaRestante = imgHeight;
-                let posicionVertical = 0;
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-                doc.addImage(imgData, 'PNG', 0, posicionVertical, pdfWidth, imgHeight);
-                alturaRestante -= pdfHeight;
-
-                while (alturaRestante > 0) {
-                    doc.addPage();
-                    posicionVertical -= pdfHeight;
-                    doc.addImage(imgData, 'PNG', 0, posicionVertical, pdfWidth, imgHeight);
-                    alturaRestante -= pdfHeight;
-                }
-                
+                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                 doc.save('contrato-alquiler-firmado.pdf');
-                botonPDF.style.display = 'block';
+
+                botonPDF.style.display = 'block'; // Volvemos a mostrar el botón
+                console.log("PDF generado y descarga iniciada.");
             }).catch(err => {
                 console.error("Error al generar el PDF:", err);
                 botonPDF.style.display = 'block';
             });
         }
+
+        document.getElementById('generar-pdf-btn').addEventListener('click', generarPDF);
     </script>
 </body>
 </html>
