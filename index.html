@@ -8,31 +8,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: #1c1e21;
-            line-height: 1.6;
-            margin: 0;
-            padding: 25px;
-        }
-        
-        /* ESTE ES EL ELEMENTO QUE CAPTURAREMOS. Ahora es el contenedor principal. */
-        #contenido-pdf {
-            max-width: 850px;
-            margin: 0 auto 25px auto; /* Centrado y con espacio abajo */
-            padding: 40px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Contenedor para el botón, para que también esté centrado */
-        .boton-container {
-            max-width: 850px;
-            margin: auto;
-        }
-
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; line-height: 1.6; margin: 0; padding: 25px; }
+        #contenido-pdf { max-width: 850px; margin: 0 auto 25px auto; padding: 40px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); }
+        .boton-container { max-width: 850px; margin: auto; }
         h1 { text-align: center; color: #1877f2; margin-bottom: 35px; font-weight: 700; }
         fieldset { border: 1px solid #dddfe2; border-radius: 8px; padding: 25px; margin-bottom: 30px; background-color: #fdfdff; page-break-inside: avoid; }
         legend { font-size: 1.3em; font-weight: 600; color: #1877f2; padding: 0 15px; }
@@ -52,7 +30,6 @@
     </style>
 </head>
 <body>
-    <!-- Este div contiene TODO lo que se va a imprimir. Es el único elemento que pasaremos a la librería. -->
     <div id="contenido-pdf">
         <h1>Contrato de Alquiler</h1>
         <form id="contrato-form" onsubmit="return false;">
@@ -67,7 +44,6 @@
                 <label for="arrendatario_dni">DNI del Arrendatario:</label>
                 <input type="text" id="arrendatario_dni" required>
             </fieldset>
-            
             <fieldset>
                 <legend>Detalles del Alquiler</legend>
                 <label for="fecha_inicio">Fecha de Inicio:</label>
@@ -91,7 +67,6 @@
                     <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
                 </div>
             </fieldset>
-            
             <fieldset>
                 <legend>Firmas Digitales</legend>
                 <div class="signature-pad">
@@ -110,14 +85,11 @@
         </form>
     </div>
     
-    <!-- El botón está FUERA del div que se imprime, en su propio contenedor centrado. -->
     <div class="boton-container">
         <button id="generar-pdf-btn" class="generate-pdf-button">Generar y Guardar PDF</button>
     </div>
 
     <script>
-        // El JavaScript no necesita cambios, ya que la lógica es correcta. 
-        // El problema era 100% de estructura HTML/CSS.
         function limpiarCanvas(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -151,29 +123,54 @@
             const imgArrendatario = document.getElementById('img_firma_arrendatario');
 
             botonPDF.style.display = 'none';
-
-            imgArrendador.src = canvasArrendador.toDataURL('image/png');
-            imgArrendatario.src = canvasArrendatario.toDataURL('image/png');
             canvasArrendador.style.display = 'none';
             canvasArrendatario.style.display = 'none';
             imgArrendador.style.display = 'block';
             imgArrendatario.style.display = 'block';
 
-            const opt = {
-              margin:       10,
-              filename:     'contrato-de-alquiler.pdf',
-              image:        { type: 'jpeg', quality: 0.98 },
-              html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-              jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            let imagenesCargadas = 0;
+            const totalImagenes = 2;
+
+            const procederConPDF = () => {
+                console.log("Ambas firmas cargadas. Procediendo a generar el PDF...");
+                const opt = {
+                  margin:       10,
+                  filename:     'contrato-de-alquiler-final.pdf',
+                  image:        { type: 'jpeg', quality: 0.98 },
+                  html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().from(elementoParaConvertir).set(opt).save().then(() => {
+                    canvasArrendador.style.display = 'block';
+                    canvasArrendatario.style.display = 'block';
+                    imgArrendador.style.display = 'none';
+                    imgArrendatario.style.display = 'none';
+                    botonPDF.style.display = 'block';
+                    console.log("PDF generado. Vista restaurada.");
+                });
+            };
+            
+            const verificarCarga = () => {
+                imagenesCargadas++;
+                if (imagenesCargadas === totalImagenes) {
+                    procederConPDF();
+                }
             };
 
-            html2pdf().from(elementoParaConvertir).set(opt).save().then(() => {
-                canvasArrendador.style.display = 'block';
-                canvasArrendatario.style.display = 'block';
-                imgArrendador.style.display = 'none';
-                imgArrendatario.style.display = 'none';
-                botonPDF.style.display = 'block';
-            });
+            imgArrendador.onload = verificarCarga;
+            imgArrendatario.onload = verificarCarga;
+
+            imgArrendador.src = canvasArrendador.toDataURL('image/png');
+            imgArrendatario.src = canvasArrendatario.toDataURL('image/png');
+
+            // Pequeño truco por si un canvas está vacío, ya que `onload` podría no dispararse.
+            const canvasVacioDataURL = document.createElement('canvas').toDataURL();
+            if (canvasArrendador.toDataURL() === canvasVacioDataURL) {
+                imgArrendador.onload();
+            }
+            if (canvasArrendatario.toDataURL() === canvasVacioDataURL) {
+                imgArrendatario.onload();
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
