@@ -107,6 +107,13 @@
     .oculto {
       display: none;
     }
+    .firma-preview {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -129,9 +136,9 @@
       <fieldset>
         <legend>Firmas Digitales</legend>
         <p><strong>Firma del Arrendador:</strong></p>
-        <img id="img-firma-arrendador" style="max-width: 100%;" />
+        <img id="img-firma-arrendador" class="firma-preview" alt="Firma Arrendador"/>
         <p><strong>Firma del Arrendatario:</strong></p>
-        <img id="img-firma-arrendatario" style="max-width: 100%;" />
+        <img id="img-firma-arrendatario" class="firma-preview" alt="Firma Arrendatario"/>
       </fieldset>
     </div>
 
@@ -140,9 +147,9 @@
       <fieldset>
         <legend>Datos de las Partes</legend>
         <label for="arrendador">Nombre del Arrendador:</label>
-        <input type="text" id="arrendador" name="arrendador" placeholder="Nombre completo del propietario" required>
+        <input type="text" id="arrendador" name="arrendador" required>
         <label for="arrendatario">Nombre del Arrendatario:</label>
-        <input type="text" id="arrendatario" name="arrendatario" placeholder="Nombre completo del inquilino" required>
+        <input type="text" id="arrendatario" name="arrendatario" required>
       </fieldset>
       <fieldset>
         <legend>Detalles del Alquiler</legend>
@@ -222,8 +229,8 @@ document.getElementById("rental-form").addEventListener("submit", function (e) {
 
   const firma1 = padArrendador.toDataURL();
   const firma2 = padArrendatario.toDataURL();
-  document.getElementById("img-firma-arrendador").src = firma1;
-  document.getElementById("img-firma-arrendatario").src = firma2;
+  document.getElementById("img-firma-arrendador").setAttribute("src", firma1);
+  document.getElementById("img-firma-arrendatario").setAttribute("src", firma2);
 
   document.getElementById("formulario-activo").style.display = "none";
 
@@ -236,7 +243,7 @@ document.getElementById("rental-form").addEventListener("submit", function (e) {
     }).from(document.getElementById("contrato")).save().then(() => {
       document.getElementById("formulario-activo").style.display = "block";
     });
-  }, 300);
+  }, 500);
 });
 </script>
 </body>
