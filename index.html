@@ -71,7 +71,7 @@
       border-radius: 5px;
       cursor: crosshair;
       touch-action: none;
-      width: 100%;
+      width: 300px;
       height: 100px;
     }
     .signature-pad {
@@ -113,8 +113,8 @@
       display: none;
     }
     .firma-preview {
-      width: 100%;
-      max-height: 100px;
+      width: 300px;
+      height: 100px;
       object-fit: contain;
     }
   </style>
@@ -184,14 +184,14 @@
         <legend>Firmas Digitales</legend>
         <div class="signature-pad">
           <label for="firma_arrendador">Firma del Arrendador:</label>
-          <canvas id="firma_arrendador"></canvas>
+          <canvas id="firma_arrendador" width="300" height="100"></canvas>
           <div class="signature-pad-actions">
             <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button>
           </div>
         </div>
         <div class="signature-pad">
           <label for="firma_arrendatario">Firma del Arrendatario:</label>
-          <canvas id="firma_arrendatario"></canvas>
+          <canvas id="firma_arrendatario" width="300" height="100"></canvas>
           <div class="signature-pad-actions">
             <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button>
           </div>
