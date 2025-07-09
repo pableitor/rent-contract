@@ -1,245 +1,160 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Formulario de Contrato de Alquiler</title>
-  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f4f7f9;
-      color: #333;
-      line-height: 1.4;
-      font-size: 0.7em;
-      margin: 0;
-      padding: 10px;
-    }
-    .form-container {
-      max-width: 700px;
-      margin: 10px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      transform: scale(0.9);
-      transform-origin: top left;
-    }
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 20px;
-    }
-    fieldset {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 15px;
-    }
-    legend {
-      font-size: 1em;
-      font-weight: bold;
-      color: #3498db;
-      padding: 0 5px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    input[type="text"],
-    input[type="date"],
-    select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      font-size: 0.9em;
-    }
-    .radio-group div {
-      margin-bottom: 8px;
-    }
-    .radio-group label {
-      display: inline-block;
-      margin-left: 6px;
-      font-weight: normal;
-    }
-    canvas {
-      border: 2px dashed #007bff;
-      border-radius: 5px;
-      cursor: crosshair;
-      touch-action: none;
-      width: 100%;
-      height: 100px;
-    }
-    .signature-pad {
-      margin-bottom: 10px;
-    }
-    .signature-pad-actions {
-      text-align: right;
-      margin-top: -5px;
-    }
-    button {
-      padding: 8px 10px;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.8em;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    .clear-button {
-      background-color: #e74c3c;
-      color: white;
-    }
-    .clear-button:hover {
-      background-color: #c0392b;
-    }
-    .submit-button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #2ecc71;
-      color: white;
-      font-size: 1em;
-      border-radius: 5px;
-    }
-    .submit-button:hover {
-      background-color: #27ae60;
-    }
-    .oculto {
-      display: none;
-    }
-    .firma-preview {
-      width: 100%;
-      max-height: 100px;
-      object-fit: contain;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato de Alquiler - Versión Compacta</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* --- ESTILOS COMPACTADOS PARA CABER EN UNA PÁGINA --- */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; line-height: 1.5; margin: 0; padding: 20px; font-size: 14px; /* Tamaño de fuente base reducido */ }
+        
+        #contenido-pdf { max-width: 800px; margin: 0 auto 20px auto; padding: 25px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07); }
+        .boton-container { max-width: 800px; margin: auto; }
+
+        h1 { text-align: center; color: #1877f2; margin-bottom: 20px; font-size: 1.8em; /* Reducido */ }
+        fieldset { border: 1px solid #dddfe2; border-radius: 8px; padding: 15px; margin-bottom: 15px; /* Reducido */ }
+        legend { font-size: 1.2em; font-weight: 600; color: #1877f2; padding: 0 10px; /* Reducido */ }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; /* Reducido */ }
+        input[type="text"], input[type="date"], select { width: 100%; padding: 8px; border: 1px solid #ccd0d5; border-radius: 5px; box-sizing: border-box; margin-bottom: 12px; font-size: 0.95em; /* Reducido */ }
+        .radio-group div { margin-bottom: 8px; }
+        .radio-group label { display: inline-block; margin-left: 8px; font-weight: normal; }
+        
+        /* --- TAMAÑO DE CANVAS REDUCIDO A LA MITAD --- */
+        canvas { border: 1px dashed #1877f2; border-radius: 5px; width: 100%; height: 100px; /* Reducido */ }
+        
+        .signature-pad { margin-bottom: 10px; }
+        .signature-pad-actions { text-align: right; margin-top: 5px; }
+        button { padding: 8px 14px; border-radius: 5px; border: none; cursor: pointer; font-size: 0.8em; font-weight: bold; transition: background-color 0.2s ease; }
+        .clear-button { background-color: #f5f6f7; color: #4b4f56; border: 1px solid #ccd0d5; }
+        .generate-pdf-button { display: block; width: 100%; padding: 15px; background-color: #25d366; color: white; font-size: 1.1em; }
+    </style>
 </head>
 <body>
-<div class="form-container">
-  <h1>Formulario de Contrato de Alquiler</h1>
-  <form id="rental-form">
-    <div id="contrato">
-      <fieldset>
-        <legend>Datos de las Partes</legend>
-        <p><strong>Arrendador:</strong> <span id="txt-arrendador"></span></p>
-        <p><strong>Arrendatario:</strong> <span id="txt-arrendatario"></span></p>
-      </fieldset>
-      <fieldset>
-        <legend>Detalles del Alquiler</legend>
-        <p><strong>Fecha de Inicio:</strong> <span id="txt-inicio"></span></p>
-        <p><strong>Fecha de Finalización:</strong> <span id="txt-fin"></span></p>
-        <p><strong>Inmueble:</strong> <span id="txt-inmueble"></span></p>
-        <p><strong>Motivo:</strong> <span id="txt-motivo"></span></p>
-      </fieldset>
-      <fieldset>
-        <legend>Firmas Digitales</legend>
-        <p><strong>Firma del Arrendador:</strong></p>
-        <img id="img-firma-arrendador" class="firma-preview" />
-        <p><strong>Firma del Arrendatario:</strong></p>
-        <img id="img-firma-arrendatario" class="firma-preview" />
-      </fieldset>
+    <div id="contenido-pdf">
+        <h1>Contrato de Alquiler</h1>
+        <form id="contrato-form" onsubmit="return false;">
+            
+            <fieldset>
+                <legend>Datos de las Partes</legend>
+                <label for="arrendador_nombre">Nombre del Arrendador:</label>
+                <input type="text" id="arrendador_nombre" required>
+                <label for="arrendador_dni">DNI del Arrendador:</label>
+                <input type="text" id="arrendador_dni" required>
+                <label for="arrendatario_nombre">Nombre del Arrendatario:</label>
+                <input type="text" id="arrendatario_nombre" required>
+                <label for="arrendatario_dni">DNI del Arrendatario:</label>
+                <input type="text" id="arrendatario_dni" required>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Detalles del Alquiler</legend>
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" id="fecha_inicio" required>
+                <label for="fecha_fin">Fecha de Finalización:</label>
+                <input type="date" id="fecha_fin" required>
+                <label for="inmueble">Inmueble a alquilar:</label>
+                <select id="inmueble" required>
+                    <option value="" disabled selected>-- Seleccione un inmueble --</option>
+                    <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
+                    <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
+                    <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
+                    <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
+                    <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
+                </select>
+                <label>Motivo de la Estancia:</label>
+                <div class="radio-group">
+                    <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="trabajo" checked><label for="motivo_trabajo">Trabajo</label></div>
+                    <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="estudio"><label for="motivo_estudio">Estudio</label></div>
+                    <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="visita familiar"><label for="motivo_familiar">Visita Familiar</label></div>
+                    <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="otros"><label for="motivo_otros">Otros</label></div>
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Firmas Digitales</legend>
+                <div class="signature-pad">
+                    <label>Firma del Arrendador:</label>
+                    <canvas id="firmaPropietario"></canvas>
+                    <div class="signature-pad-actions">
+                        <button type="button" class="clear-button" onclick="borrarFirma('propietario')">Limpiar Firma</button>
+                    </div>
+                </div>
+                <div class="signature-pad">
+                    <label>Firma del Arrendatario:</label>
+                    <canvas id="firmaInquilino"></canvas>
+                    <div class="signature-pad-actions">
+                        <button type="button" class="clear-button" onclick="borrarFirma('inquilino')">Limpiar Firma</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    
+    <div class="boton-container">
+        <button id="generar-pdf-btn" class="generate-pdf-button" onclick="generarYDescargarPDF()">Generar y Guardar PDF</button>
     </div>
 
-    <div id="formulario-activo">
-      <fieldset>
-        <legend>Datos de las Partes</legend>
-        <label for="arrendador">Nombre del Arrendador:</label>
-        <input type="text" id="arrendador" name="arrendador" required>
-        <label for="arrendatario">Nombre del Arrendatario:</label>
-        <input type="text" id="arrendatario" name="arrendatario" required>
-      </fieldset>
-      <fieldset>
-        <legend>Detalles del Alquiler</legend>
-        <label for="fecha_inicio">Fecha de Inicio del Alquiler:</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" required>
-        <label for="fecha_fin">Fecha de Finalización del Alquiler:</label>
-        <input type="date" id="fecha_fin" name="fecha_fin" required>
-        <label for="inmueble">Inmueble a alquilar:</label>
-        <select id="inmueble" name="inmueble" required>
-          <option value="" disabled selected>-- Seleccione un inmueble --</option>
-          <option value="REF-001">Calle Mayor 15, 1ºA, Madrid - REF-001</option>
-          <option value="REF-002">Avenida de la Constitución 42, Bajo, Sevilla - REF-002</option>
-          <option value="REF-003">Paseo de Gracia 92, Ático, Barcelona - REF-003</option>
-          <option value="REF-004">Calle Larios 5, 3ºD, Málaga - REF-004</option>
-          <option value="REF-005">Plaza del Pilar 1, 2º Izda, Zaragoza - REF-005</option>
-        </select>
-        <label>Motivo de la Estancia:</label>
-        <div class="radio-group">
-          <div><input type="radio" id="motivo_trabajo" name="motivo_estancia" value="Trabajo" checked>
-            <label for="motivo_trabajo">Trabajo</label></div>
-          <div><input type="radio" id="motivo_estudio" name="motivo_estancia" value="Estudio">
-            <label for="motivo_estudio">Estudio</label></div>
-          <div><input type="radio" id="motivo_familiar" name="motivo_estancia" value="Visita Familiar">
-            <label for="motivo_familiar">Visita Familiar</label></div>
-          <div><input type="radio" id="motivo_otros" name="motivo_estancia" value="Otros">
-            <label for="motivo_otros">Otros</label></div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Firmas Digitales</legend>
-        <div class="signature-pad">
-          <label for="firma_arrendador">Firma del Arrendador:</label>
-          <canvas id="firma_arrendador"></canvas>
-          <div class="signature-pad-actions">
-            <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendador')">Limpiar Firma</button>
-          </div>
-        </div>
-        <div class="signature-pad">
-          <label for="firma_arrendatario">Firma del Arrendatario:</label>
-          <canvas id="firma_arrendatario"></canvas>
-          <div class="signature-pad-actions">
-            <button type="button" class="clear-button" onclick="limpiarCanvas('firma_arrendatario')">Limpiar Firma</button>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-    <button type="submit" class="submit-button">Generar Contrato PDF</button>
-  </form>
-</div>
-<script>
-const canvasArrendador = document.getElementById("firma_arrendador");
-const canvasArrendatario = document.getElementById("firma_arrendatario");
-const padArrendador = new SignaturePad(canvasArrendador);
-const padArrendatario = new SignaturePad(canvasArrendatario);
+    <script>
+        const canvasProp = document.getElementById("firmaPropietario");
+        const canvasInq = document.getElementById("firmaInquilino");
+        
+        // Ajustamos el tamaño del canvas de dibujo para que coincida con el CSS
+        // Esto es importante para que la firma no se vea pixelada.
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvasProp.width = canvasProp.offsetWidth * ratio;
+        canvasProp.height = canvasProp.offsetHeight * ratio;
+        canvasProp.getContext("2d").scale(ratio, ratio);
+        canvasInq.width = canvasInq.offsetWidth * ratio;
+        canvasInq.height = canvasInq.offsetHeight * ratio;
+        canvasInq.getContext("2d").scale(ratio, ratio);
 
-function limpiarCanvas(id) {
-  if (id === "firma_arrendador") padArrendador.clear();
-  else if (id === "firma_arrendatario") padArrendatario.clear();
-}
+        const padProp = new SignaturePad(canvasProp);
+        const padInq = new SignaturePad(canvasInq);
 
-document.getElementById("rental-form").addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (padArrendador.isEmpty() || padArrendatario.isEmpty()) {
-    alert("Por favor, firma ambos campos antes de generar el PDF.");
-    return;
-  }
-  document.getElementById("txt-arrendador").textContent = document.getElementById("arrendador").value;
-  document.getElementById("txt-arrendatario").textContent = document.getElementById("arrendatario").value;
-  document.getElementById("txt-inicio").textContent = document.getElementById("fecha_inicio").value;
-  document.getElementById("txt-fin").textContent = document.getElementById("fecha_fin").value;
-  document.getElementById("txt-inmueble").textContent = document.getElementById("inmueble").selectedOptions[0].text;
-  const motivo = document.querySelector('input[name="motivo_estancia"]:checked');
-  document.getElementById("txt-motivo").textContent = motivo ? motivo.value : "";
-  document.getElementById("img-firma-arrendador").setAttribute("src", padArrendador.toDataURL());
-  document.getElementById("img-firma-arrendatario").setAttribute("src", padArrendatario.toDataURL());
-  document.getElementById("formulario-activo").style.display = "none";
+        function borrarFirma(tipo) {
+            if (tipo === 'propietario') padProp.clear();
+            else padInq.clear();
+        }
 
-  setTimeout(() => {
-    html2pdf().set({
-      margin: 0.2,
-      filename: 'contrato_alquiler.pdf',
-      html2canvas: { scale: 3, useCORS: true },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    }).from(document.getElementById("contrato")).save().then(() => {
-      document.getElementById("formulario-activo").style.display = "block";
-    });
-  }, 500);
-});
-</script>
+        function generarYDescargarPDF() {
+            if (padProp.isEmpty() || padInq.isEmpty()) {
+                alert("Por favor, ambas partes deben firmar el contrato.");
+                return;
+            }
+            const elementoParaConvertir = document.getElementById("contenido-pdf");
+            const botonesLimpiar = document.querySelectorAll('.clear-button');
+            
+            botonesLimpiar.forEach(boton => boton.style.display = 'none');
+            
+            // La escala aquí es para la CALIDAD de la imagen, no para el tamaño.
+            // Una escala alta da más resolución al PDF.
+            const opt = {
+                margin: 5, // Margen reducido
+                filename: 'contrato-alquiler-firmado.pdf',
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(elementoParaConvertir).outputPdf('datauristring').then(function (pdfBase64) {
+                botonesLimpiar.forEach(boton => boton.style.display = 'inline-block');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = pdfBase64;
+                downloadLink.download = "contrato-alquiler-firmado.pdf";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                alert("✅ PDF generado con éxito.");
+            }).catch(err => {
+                botonesLimpiar.forEach(boton => boton.style.display = 'inline-block');
+                console.error("Error al generar el PDF:", err);
+                alert("❌ Ocurrió un error al generar el PDF.");
+            });
+        }
+    </script>
 </body>
 </html>
