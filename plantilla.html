@@ -121,8 +121,17 @@
         input[type="date"] { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         input[type="date"]::-webkit-inner-spin-button, input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
         
-        input[type="radio"] { -webkit-appearance: none; -moz-appearance: none; appearance: none; border: 1px solid #333; border-radius: 50%; width: 12px; height: 12px; margin-right: 5px; }
-        input[type="radio"]:checked { background-color: #333; }
+        /* Ocultamos los radio buttons originales para que no salgan vacíos */
+        input[type="radio"] { display: none; }
+
+        /* NUEVA REGLA: Estilo para la etiqueta de la opción seleccionada */
+        .selected-for-print {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .selected-for-print::before {
+            content: '(X) '; /* Añade un marcador visual extra */
+        }
     }
   </style>
 </head>
@@ -283,10 +292,31 @@
         otrosDetailsInput.style.display = 'inline-block';
       } else {
         otrosDetailsInput.style.display = 'none';
-        otrosDetailsInput.value = ''; // Limpiar el campo si se selecciona otra opción
+        otrosDetailsInput.value = '';
       }
     });
   });
+
+  // --- NUEVO SCRIPT: Lógica para impresión compatible con móviles ---
+  window.addEventListener('beforeprint', () => {
+    const checkedRadio = document.querySelector('input[name="purpose"]:checked');
+    if (checkedRadio) {
+      // Usamos el ID del radio para encontrar su etiqueta <label> asociada
+      const label = document.querySelector(`label[for="${checkedRadio.id}"]`);
+      if (label) {
+        label.classList.add('selected-for-print');
+      }
+    }
+  });
+
+  window.addEventListener('afterprint', () => {
+    // Buscamos la etiqueta que modificamos y le quitamos la clase
+    const printedLabel = document.querySelector('.selected-for-print');
+    if (printedLabel) {
+      printedLabel.classList.remove('selected-for-print');
+    }
+  });
+
 </script>
 
 </body>
