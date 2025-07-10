@@ -1,116 +1,327 @@
-<!DOCTYPE  html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html lang="es" xml:lang="es" xmlns="http://www.w3.org/1999/xhtml">
- <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
-  <title>
-   Contrato alojamiento habitacion estancias no vacacionales
-  </title>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrato de Alojamiento Temporal</title>
   <style type="text/css">
-   * {margin:0; padding:0; text-indent:0; }
- p { color: black; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 11pt; margin:0pt; }
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    /* --- GLOBAL STYLES --- */
+    :root {
+      --primary-color: #005a9c;
+      --secondary-color: #333;
+      --light-gray: #f4f7f9;
+      --border-color: #e0e0e0;
+      --placeholder-bg: #eeeeee;
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      background-color: var(--light-gray);
+      color: #444;
+      line-height: 1.6;
+      font-size: 11pt;
+      padding: 2rem 1rem;
+    }
+
+    /* --- CONTAINER --- */
+    .contract-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    /* --- TYPOGRAPHY --- */
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--secondary-color);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      margin-bottom: 1.2rem;
+    }
+    
+    p:last-child {
+        margin-bottom: 0;
+    }
+    
+    .party-info {
+        background-color: var(--light-gray);
+        padding: 1rem 1.5rem;
+        border-left: 4px solid var(--primary-color);
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+
+    .placeholder {
+      background-color: var(--placeholder-bg);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-style: italic;
+      border-bottom: 2px solid var(--border-color);
+    }
+    
+    .signature-section p {
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* --- DROPDOWN STYLES --- */
     .dropdown {
       position: relative;
       width: 100%;
-      max-width: 600px;
     }
+
     .dropdown-toggle {
-      padding: 10px;
-      border: 1px solid #ccc;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
       cursor: pointer;
       background-color: #fff;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s;
+      text-align: left;
     }
+
+    .dropdown-toggle:hover {
+        border-color: var(--primary-color);
+    }
+
+    .dropdown-toggle::after {
+        content: '▼';
+        font-size: 0.8em;
+        color: #888;
+        margin-left: 10px;
+    }
+
     .dropdown-menu {
       position: absolute;
       top: 100%;
       left: 0;
       right: 0;
       background: #fff;
-      border: 1px solid #ccc;
-      max-height: 300px;
+      border: 1px solid var(--border-color);
+      border-top: none;
+      max-height: 250px;
       overflow-y: auto;
       display: none;
       z-index: 1000;
+      border-radius: 0 0 6px 6px;
+      box-shadow: 0 8px 10px rgba(0,0,0,0.1);
     }
+
     .dropdown-menu .option {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f0f0;
       cursor: pointer;
+      transition: background-color 0.2s;
     }
+    
+    .dropdown-menu .option:last-child {
+        border-bottom: none;
+    }
+
     .dropdown-menu .option:hover {
-      background-color: #f0f0f0;
+      background-color: var(--light-gray);
     }
-    .dropdown-menu .direccion {
+
+    .direccion {
       font-weight: bold;
+      color: var(--secondary-color);
     }
-    .dropdown-menu .nrua {
-      font-size: 0.9em;
-      color: #555;
+
+    .nrua {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 4px;
+      display: block; /* Ensures it goes to the next line */
+    }
+
+    /* --- PURPOSE LIST STYLES --- */
+    .purpose-list {
+        background-color: #f9f9f9;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem 1.5rem;
+    }
+    
+    .purpose-list p {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* --- SIGNATURE CANVAS --- */
+    canvas {
+        width: 300px;  /* Fixed width */
+        height: 200px; /* Fixed height */
+        border: 2px dashed var(--border-color);
+        border-radius: 8px;
+        cursor: crosshair;
+        background-color: #fcfcfc;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 1rem 0.5rem;
+        }
+        .contract-container {
+            padding: 1.5rem;
+        }
+        h1 {
+            font-size: 1.5rem;
+        }
+        h2 {
+            font-size: 1.2rem;
+        }
     }
   </style>
- </head>
- <body>
-<p style="padding-top: 4pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">En Madrid, a [Fecha]</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">REUNIDOS</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: justify;">De una parte, D./D.ª Nina Dong, mayor de edad, con domicilio en [Dirección], y con NIF 05298495P, en adelante, la Parte Arrendadora.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: justify;">Y de otra, D./D.ª [Nombre del arrendatario], mayor de edad, con domicilio en [Dirección], y con NIF/PASAPORTE [NIF del arrendatario], en adelante, la Parte Arrendataria.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: justify;">Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">CLÁUSULAS</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Primera. Objeto del contrato</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: justify;">La Parte Arrendadora cede en arrendamiento a la Parte Arrendataria, quien acepta, la unidad de alojamiento ubicada en: </p>
+</head>
+<body>
 
-<div class="dropdown" id="alojDropdown">
-<div class="dropdown-toggle" id="selectedOption">Haz clic para seleccionar alojamiento</div>
-<div class="dropdown-menu" id="dropdownMenu">
-<div class="option" data-value="alcala-roja">
-<div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID , HAB ROJA</div>
-<div class="nrua">NRUA ESHFNT00002811700057862300100000000000000000000000007</div>
-</div>
-<div class="option" data-value="alcala-verde">
-<div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID , HAB VERDE</div>
-<div class="nrua">NRUA ESHFNT00002811700057862300200000000000000000000000006</div>
-</div>
-<div class="option" data-value="alcala-amarilla">
-<div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID , HAB AMARILLA</div>
-<div class="nrua">NRUA ESHFNT00002811700057862300300000000000000000000000005</div>
-</div>
-<div class="option" data-value="vallejo-1">
-<div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 1</div>
-<div class="nrua">NRUA ESHFNT00002811700042449400100000000000000000000000003</div>
-</div>
-<div class="option" data-value="vallejo-2">
-<div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 2</div>
-<div class="nrua">NRUA ESHFNT00002811700042449400200000000000000000000000002</div>
-</div>
-<div class="option" data-value="vallejo-3">
-<div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 3</div>
-<div class="nrua">NRUA ESHFNT00002811700042449400300000000000000000000000001</div>
-</div>
-<div class="option" data-value="vallejo-4">
-<div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 4</div>
-<div class="nrua">NRUA ESHFNT00002811700042449400400000000000000000000000000</div>
-</div>
-<div class="option" data-value="vallejo-5">
-<div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 5</div>
-<div class="nrua">NRUA ESHFNT00002811700042449400500000000000000000000000009</div>
-</div>
-</div>
+<div class="contract-container">
+  <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
+  <p style="text-align:right;">En Madrid, a <span class="placeholder">[Fecha]</span></p>
+
+  <h2>REUNIDOS</h2>
+
+  <div class="party-info">
+    <p>
+      <strong>De una parte, D./D.ª Nina Dong</strong>, mayor de edad, con domicilio en <span class="placeholder">[Dirección]</span>, y con NIF 05298495P, en adelante, la <strong>Parte Arrendadora</strong>.
+    </p>
+  </div>
+  
+  <div class="party-info">
+    <p>
+      <strong>Y de otra, D./D.ª <span class="placeholder">[Nombre del arrendatario]</span></strong>, mayor de edad, con domicilio en <span class="placeholder">[Dirección]</span>, y con NIF/PASAPORTE <span class="placeholder">[NIF del arrendatario]</span>, en adelante, la <strong>Parte Arrendataria</strong>.
+    </p>
+  </div>
+  
+  <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
+
+  <h2>CLÁUSULAS</h2>
+
+  <h3>Primera. Objeto del contrato</h3>
+  <p>La Parte Arrendadora cede en arrendamiento a la Parte Arrendataria, quien acepta, la unidad de alojamiento ubicada en:</p>
+
+  <div class="dropdown" id="alojDropdown">
+    <div class="dropdown-toggle" id="selectedOption">Haz clic para seleccionar alojamiento</div>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <div class="option" data-value="alcala-roja">
+        <div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB ROJA</div>
+        <span class="nrua">NRUA ESHFNT000028117000578623001000000000000000000000000007</span>
+      </div>
+      <div class="option" data-value="alcala-verde">
+        <div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB VERDE</div>
+        <span class="nrua">NRUA ESHFNT00002811700057862300200000000000000000000000006</span>
+      </div>
+      <div class="option" data-value="alcala-amarilla">
+        <div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB AMARILLA</div>
+        <span class="nrua">NRUA ESHFNT00002811700057862300300000000000000000000000005</span>
+      </div>
+      <div class="option" data-value="vallejo-1">
+        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 1</div>
+        <span class="nrua">NRUA ESHFNT00002811700042449400100000000000000000000000003</span>
+      </div>
+      <div class="option" data-value="vallejo-2">
+        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 2</div>
+        <span class="nrua">NRUA ESHFNT00002811700042449400200000000000000000000000002</span>
+      </div>
+      <div class="option" data-value="vallejo-3">
+        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 3</div>
+        <span class="nrua">NRUA ESHFNT00002811700042449400300000000000000000000000001</span>
+      </div>
+      <div class="option" data-value="vallejo-4">
+        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 4</div>
+        <span class="nrua">NRUA ESHFNT00002811700042449400400000000000000000000000000</span>
+      </div>
+      <div class="option" data-value="vallejo-5">
+        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 5</div>
+        <span class="nrua">NRUA ESHFNT00002811700042449400500000000000000000000000009</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Segunda. Finalidad temporal del arrendamiento</h3>
+  <p>El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
+  <div class="purpose-list">
+    <p>[ ] Trabajo temporal</p>
+    <p>[ ] Estudios</p>
+    <p>[ ] Tratamiento médico</p>
+    <p>[ ] Motivos personales / familiares</p>
+    <p>Otros <span class="placeholder">[Especificar]</span></p>
+  </div>
+  <p>Conforme al artículo 3 de la Ley de Arrendamientos Urbanos, este contrato no se rige por las disposiciones aplicables al arrendamiento de vivienda habitual.</p>
+
+  <h3>Tercera. Duración</h3>
+  <p>El presente contrato tendrá una duración desde el día <span class="placeholder">[Fecha de inicio]</span> hasta el día <span class="placeholder">[Fecha de finalización]</span>, sin posibilidad de prórroga tácita, salvo acuerdo expreso.</p>
+
+  <h3>Cuarta. Renta y forma de pago</h3>
+  <p>El precio del arrendamiento ha sido acordado y satisfecho íntegramente a través de la plataforma digital: <span class="placeholder">[Nombre de la plataforma]</span>.</p>
+  <p>Dicha plataforma incluye tasas e impuestos en la gestión del pago. Las partes reconocen haber aceptado las condiciones económicas en dicha plataforma.</p>
+
+  <h3>Quinta. Fianza</h3>
+  <p>Al tratarse del arrendamiento temporal de una habitación ubicada dentro de la vivienda habitual de la parte arrendadora, las partes acuerdan no establecer fianza alguna.</p>
+  <p>Esta exención se realiza conforme al carácter temporal del arrendamiento y la naturaleza del uso compartido del inmueble, en ejercicio de la libertad contractual reconocida por la normativa civil vigente.</p>
+
+  <h3>Sexta. Uso y conservación</h3>
+  <p>El arrendatario usará el alojamiento exclusivamente como vivienda temporal, sin realizar actividades molestas o ilegales.</p>
+
+  <h3>Séptima. Protección de datos personales</h3>
+  <p>En cumplimiento del RGPD y LOPDGDD, se informa que los datos personales se tratarán para la gestión del arrendamiento y podrán comunicarse al Registro y la Ventanilla Única Digital. El arrendatario podrá ejercer sus derechos de protección de datos.</p>
+
+  <h3>Octava. Legislación aplicable</h3>
+  <p>Este contrato se rige por el Código Civil, la LAU, el Real Decreto 1312/2024 y normativa aplicable.</p>
+
+  <p style="text-align:center; margin-top: 3rem;">Firmado por duplicado en el lugar y fecha indicados.</p>
+
+  <div class="signature-section">
+      <p>LA PARTE ARRENDADORA:</p>
+      <canvas height="200" id="firmaArrendadora" width="300"></canvas>
+  </div>
+  
+  <div class="signature-section">
+      <p>LA PARTE ARRENDATARIA:</p>
+      <canvas height="200" id="firmaArrendataria" width="300"></canvas>
+  </div>
+
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
 <script>
+  // --- Dropdown Logic ---
   const toggle = document.getElementById('selectedOption');
   const menu = document.getElementById('dropdownMenu');
   const options = document.querySelectorAll('.option');
@@ -121,83 +332,65 @@
 
   options.forEach(option => {
     option.addEventListener('click', () => {
-      toggle.innerHTML = option.querySelector('.direccion').textContent +
-        '<br><span style="font-size: 0.9em; color: #555;">' +
-        option.querySelector('.nrua').textContent + '</span>';
+      const direccion = option.querySelector('.direccion').textContent;
+      const nrua = option.querySelector('.nrua').textContent;
+      
+      // CAMBIO: Se envuelve el contenido en un div para que el flexbox del toggle
+      // lo trate como un solo bloque, permitiendo que el contenido interno fluya verticalmente.
+      toggle.innerHTML = '<div><div class="direccion">' + direccion + '</div><span class="nrua">' + nrua + '</span></div>';
       menu.style.display = 'none';
     });
   });
 
-  // Cierra el menú si haces clic fuera
   window.addEventListener('click', e => {
     if (!document.getElementById('alojDropdown').contains(e.target)) {
       menu.style.display = 'none';
     }
   });
-</script>
 
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Segunda. Finalidad temporal del arrendamiento</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">[ ] Trabajo temporal </p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">[ ] Estudios</p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">[ ] Tratamiento médico</p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">[ ] Motivos personales / familiares</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;">Otros [Especificar]</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: left;">Conforme al artículo 3 de la Ley de Arrendamientos Urbanos, este contrato no se rige por las disposiciones aplicables al arrendamiento de vivienda habitual.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Tercera. Duración</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: left;">El presente contrato tendrá una duración desde el día [Fecha de inicio] hasta el día [Fecha de finalización], sin posibilidad de prórroga tácita, salvo acuerdo expreso.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Cuarta. Renta y forma de pago</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">El precio del arrendamiento ha sido acordado y satisfecho íntegramente a través de la plataforma digital:</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;"><u>                                      </u>.</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Dicha plataforma incluye tasas e impuestos en la gestión del pago.</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Las partes reconocen haber aceptado las condiciones económicas en dicha plataforma.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Quinta. Fianza</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: left;">Al tratarse del arrendamiento temporal de una habitación ubicada dentro de la vivienda habitual de la parte arrendadora, las partes acuerdan no establecer fianza alguna.</p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: left;">Esta exención se realiza conforme al carácter temporal del arrendamiento y la naturaleza del uso compartido del inmueble, en ejercicio de la libertad contractual reconocida por la normativa civil vigente.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Sexta. Uso y conservación</p>
-<p style="padding-top: 4pt;padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: justify;">El arrendatario usará el alojamiento exclusivamente como vivienda temporal, sin realizar actividades molestas o ilegales.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Séptima. Protección de datos personales</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;line-height: 224%;text-align: justify;">En cumplimiento del RGPD y LOPDGDD, se informa que los datos personales se tratarán para la gestión del arrendamiento y podrán comunicarse al Registro y la Ventanilla Única Digital. El arrendatario podrá ejercer sus derechos de protección de datos.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Octava. Legislación aplicable</p>
-<p style="padding-top: 3pt;text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Este contrato se rige por el Código Civil, la LAU, el Real Decreto 1312/2024 y normativa aplicable.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">Firmado por duplicado en el lugar y fecha indicados.</p>
-<p style="text-indent: 0pt;text-align: left;"><br/></p>
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">LA PARTE ARRENDADORA:</p>
-
-<canvas height="200" id="firmaArrendadora" style="border:1px solid #000; display:block; margin:10px 0;" width="300"></canvas>
-
-<p style="padding-left: 5pt;text-indent: 0pt;text-align: left;">LA PARTE ARRENDATARIA:</p>
-
-<canvas height="200" id="firmaArrendataria" style="border:1px solid #000; display:block; margin:10px 0;" width="300"></canvas>
-
-
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
-
-
-<script>
+  // --- Signature Pad Logic ---
   const canvas1 = document.getElementById('firmaArrendadora');
-  const firma1 = new SignaturePad(canvas1);
+  const firma1 = new SignaturePad(canvas1, {
+      backgroundColor: 'rgba(252, 252, 252, 1)' // Match canvas CSS background
+  });
 
   const canvas2 = document.getElementById('firmaArrendataria');
-  const firma2 = new SignaturePad(canvas2);
+  const firma2 = new SignaturePad(canvas2, {
+      backgroundColor: 'rgba(252, 252, 252, 1)'
+  });
+  
+  // Adjust canvas size to be HiDPI/Retina aware
+  function resizeCanvas(canvas) {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    // Usa offsetWidth/Height del CSS para calcular el tamaño real del buffer
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.getContext("2d").scale(ratio, ratio);
+  }
+  
+  // Limpiar el contenido del canvas si la ventana cambia de tamaño
+  function clearAndResize() {
+      // Para cada canvas
+      [canvas1, canvas2].forEach(canvas => {
+          // Guardar la firma actual
+          const data = canvas.signaturePad.toData();
+          // Redimensionar
+          resizeCanvas(canvas);
+          // Restaurar la firma
+          canvas.signaturePad.fromData(data);
+      });
+  }
+
+  // Asociar SignaturePad a cada canvas para acceder a el en la función de redimensionado
+  canvas1.signaturePad = firma1;
+  canvas2.signaturePad = firma2;
+
+  window.addEventListener("resize", clearAndResize);
+  
+  // Redimensionado inicial
+  resizeCanvas(canvas1);
+  resizeCanvas(canvas2);
+
 </script>
 
 </body>
