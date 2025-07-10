@@ -14,11 +14,7 @@
       --placeholder-bg: #eeeeee;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -38,101 +34,38 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     }
 
-    h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--secondary-color);
-      text-align: center;
-      margin-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1rem;
-    }
-
-    h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--primary-color);
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--secondary-color);
-      margin-top: 2rem;
-      margin-bottom: 0.8rem;
-    }
-
-    p {
-      margin-bottom: 1.2rem;
-    }
+    h1 { font-size: 1.8rem; font-weight: 700; color: var(--secondary-color); text-align: center; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+    h2 { font-size: 1.3rem; font-weight: 600; color: var(--primary-color); margin-top: 2.5rem; margin-bottom: 1rem; }
+    h3 { font-size: 1.1rem; font-weight: 600; color: var(--secondary-color); margin-top: 2rem; margin-bottom: 0.8rem; }
+    p { margin-bottom: 1.2rem; }
+    p:last-child { margin-bottom: 0; }
     
-    p:last-child {
-        margin-bottom: 0;
-    }
-    
-    .party-info {
-        background-color: var(--light-gray);
-        padding: 1rem 1.5rem;
-        border-left: 4px solid var(--primary-color);
-        border-radius: 4px;
-        margin-bottom: 1rem;
-    }
+    .party-info { background-color: var(--light-gray); padding: 1rem 1.5rem; border-left: 4px solid var(--primary-color); border-radius: 4px; margin-bottom: 1rem; }
 
     .placeholder {
       background-color: var(--placeholder-bg);
       padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
-      font-style: italic;
-      border-bottom: 2px solid var(--border-color);
+      font-family: inherit;
+      font-size: inherit;
     }
+    input.placeholder {
+        border: 1px solid #ccc;
+        padding: 4px 8px;
+    }
+    input[type="text"].placeholder { min-width: 250px; }
+    input[type="date"].placeholder { border: 1px solid #ccc; padding: 3px 8px; width: auto; }
     
+    .full-width-input { width: 100%; }
+
     /* --- SECCIÓN DE FIRMAS --- */
-    .signatures-container {
-        display: flex;
-        justify-content: space-around;
-        gap: 2rem;
-        flex-wrap: wrap; /* Para que se apilen en pantallas pequeñas */
-        margin-top: 2rem;
-    }
-
-    .signature-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .signature-section p {
-        font-weight: 600;
-        color: var(--secondary-color);
-        margin-bottom: 0.5rem;
-    }
-
-    canvas {
-        width: 300px;
-        height: 200px;
-        border: 2px dashed var(--border-color);
-        border-radius: 8px;
-        cursor: crosshair;
-        background-color: #fcfcfc;
-    }
-
-    .clear-signature-btn {
-        margin-top: 0.5rem;
-        padding: 6px 12px;
-        font-size: 0.8rem;
-        color: #777;
-        background-color: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.2s, color 0.2s;
-    }
-    .clear-signature-btn:hover {
-        background-color: #e0e0e0;
-        color: #333;
-    }
+    .signatures-container { display: flex; justify-content: space-around; gap: 2rem; flex-wrap: wrap; margin-top: 2rem; }
+    .signature-section { display: flex; flex-direction: column; align-items: center; }
+    .signature-section p { font-weight: 600; color: var(--secondary-color); margin-bottom: 0.5rem; }
+    canvas { width: 300px; height: 200px; border: 2px dashed var(--border-color); border-radius: 8px; cursor: crosshair; background-color: #fcfcfc; }
+    .clear-signature-btn { margin-top: 0.5rem; padding: 6px 12px; font-size: 0.8rem; color: #777; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: background-color 0.2s, color 0.2s; }
+    .clear-signature-btn:hover { background-color: #e0e0e0; color: #333; }
 
     /* --- DROPDOWN --- */
     .dropdown { position: relative; width: 100%; }
@@ -145,8 +78,14 @@
     .dropdown-menu .option:hover { background-color: var(--light-gray); }
     .direccion { font-weight: bold; color: var(--secondary-color); }
     .nrua { font-size: 0.85em; color: #666; margin-top: 4px; display: block; }
+    
+    /* --- PURPOSE LIST CON RADIO BUTTONS --- */
     .purpose-list { background-color: #f9f9f9; border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem 1.5rem; }
-    .purpose-list p { margin-bottom: 0.5rem; }
+    .purpose-option { display: flex; align-items: center; margin-bottom: 0.8rem; }
+    .purpose-option:last-child { margin-bottom: 0; }
+    .purpose-option input[type="radio"] { margin-right: 10px; transform: scale(1.1); }
+    .purpose-option label { cursor: pointer; flex-grow: 1; }
+    #purpose-otros-details { display: none; margin-left: 10px; }
 
     @media (max-width: 768px) {
         body { padding: 1rem 0.5rem; }
@@ -155,37 +94,35 @@
         h2 { font-size: 1.2rem; }
     }
     
-    /* --- ESTILOS PARA IMPRESIÓN --- */
     @media print {
-        body {
-            font-size: 10pt; line-height: 1.3; padding: 0; background-color: #fff; color: #000;
-        }
-        .contract-container {
-            max-width: 100%; padding: 0; box-shadow: none; border-radius: 0; margin: 0;
-        }
-        h1, h2, h3 {
-            color: #000 !important; margin-top: 1.2em; margin-bottom: 0.6em; padding-bottom: 0.2em;
-        }
+        body { font-size: 10pt; line-height: 1.3; padding: 0; background-color: #fff; color: #000; }
+        .contract-container { max-width: 100%; padding: 0; box-shadow: none; border-radius: 0; margin: 0; }
+        h1, h2, h3 { color: #000 !important; margin-top: 1.2em; margin-bottom: 0.6em; padding-bottom: 0.2em; }
         h1 { font-size: 15pt; }
         h2 { font-size: 12pt; }
         h3 { font-size: 11pt; border-bottom: 1px solid #ccc; }
         p { margin-bottom: 0.8em; }
-        .party-info, .purpose-list {
-            padding: 0.5em 0.8em; margin-bottom: 0.8em; background-color: #f0f0f0 !important; border: 1px solid #ddd;
+        .party-info, .purpose-list { padding: 0.5em 0.8em; margin-bottom: 0.8em; background-color: #f0f0f0 !important; border: 1px solid #ddd; }
+        
+        .placeholder, input.placeholder {
+            background-color: transparent !important;
+            border: none;
+            border-bottom: 1px solid #999;
+            border-radius: 0;
+            padding: 0 2px;
         }
-        .placeholder {
-            background-color: #e0e0e0; padding: 0.1em 0.3em; border-bottom: 1px solid #999;
-        }
+
         .dropdown-toggle { border: none; padding: 0; }
         .dropdown-toggle::after { display: none; }
-        .signatures-container {
-            page-break-inside: avoid; /* Evita que las firmas se dividan entre páginas */
-        }
+        .signatures-container { page-break-inside: avoid; }
         canvas { border: 1px solid #333; }
+        .clear-signature-btn { display: none !important; }
         
-        .clear-signature-btn {
-            display: none !important;
-        }
+        input[type="date"] { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        input[type="date"]::-webkit-inner-spin-button, input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
+        
+        input[type="radio"] { -webkit-appearance: none; -moz-appearance: none; appearance: none; border: 1px solid #333; border-radius: 50%; width: 12px; height: 12px; margin-right: 5px; }
+        input[type="radio"]:checked { background-color: #333; }
     }
   </style>
 </head>
@@ -193,17 +130,17 @@
 
 <div class="contract-container">
   <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
-  <p style="text-align:right;">En Madrid, a <span class="placeholder">[Fecha]</span></p>
+  <p style="text-align:right;">En Madrid, a <input type="date" class="placeholder" id="fechaContrato"></p>
 
   <h2>REUNIDOS</h2>
   <div class="party-info">
     <p>
-      <strong>De una parte, D./D.ª Nina Dong</strong>, mayor de edad, con domicilio en <span class="placeholder">[Dirección]</span>, y con NIF 05298495P, en adelante, la <strong>Parte Arrendadora</strong>.
+      <strong>De una parte, D./D.ª Nina Dong</strong>, mayor de edad, con domicilio en <span class="placeholder">Rd. Calabasa 11 , 28043 Madrid</span>, y con NIF <span class="placeholder">05298495P</span>, en adelante, la <strong>Parte Arrendadora</strong>.
     </p>
   </div>
   <div class="party-info">
     <p>
-      <strong>Y de otra, D./D.ª <span class="placeholder">[Nombre del arrendatario]</span></strong>, mayor de edad, con domicilio en <span class="placeholder">[Dirección]</span>, y con NIF/PASAPORTE <span class="placeholder">[NIF del arrendatario]</span>, en adelante, la <strong>Parte Arrendataria</strong>.
+      <strong>Y de otra, D./D.ª <input type="text" class="placeholder" placeholder="Nombre y apellidos" maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" placeholder="Dirección completa" maxlength="100">, y con NIF/PASAPORTE <input type="text" class="placeholder" placeholder="NIF o Pasaporte" maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
     </p>
   </div>
   <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
@@ -215,57 +152,47 @@
   <div class="dropdown" id="alojDropdown">
     <div class="dropdown-toggle" id="selectedOption">Haz clic para seleccionar alojamiento</div>
     <div class="dropdown-menu" id="dropdownMenu">
-      <div class="option" data-value="alcala-roja">
-        <div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB ROJA</div>
-        <span class="nrua">NRUA ESHFNT000028117000578623001000000000000000000000000007</span>
-      </div>
-      <div class="option" data-value="alcala-verde">
-        <div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB VERDE</div>
-        <span class="nrua">NRUA ESHFNT00002811700057862300200000000000000000000000006</span>
-      </div>
-      <div class="option" data-value="alcala-amarilla">
-        <div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB AMARILLA</div>
-        <span class="nrua">NRUA ESHFNT00002811700057862300300000000000000000000000005</span>
-      </div>
-      <div class="option" data-value="vallejo-1">
-        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 1</div>
-        <span class="nrua">NRUA ESHFNT00002811700042449400100000000000000000000000003</span>
-      </div>
-      <div class="option" data-value="vallejo-2">
-        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 2</div>
-        <span class="nrua">NRUA ESHFNT00002811700042449400200000000000000000000000002</span>
-      </div>
-      <div class="option" data-value="vallejo-3">
-        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 3</div>
-        <span class="nrua">NRUA ESHFNT00002811700042449400300000000000000000000000001</span>
-      </div>
-      <div class="option" data-value="vallejo-4">
-        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 4</div>
-        <span class="nrua">NRUA ESHFNT00002811700042449400400000000000000000000000000</span>
-      </div>
-      <div class="option" data-value="vallejo-5">
-        <div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 5</div>
-        <span class="nrua">NRUA ESHFNT00002811700042449400500000000000000000000000009</span>
-      </div>
+      <div class="option" data-value="alcala-roja"><div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB ROJA</div><span class="nrua">NRUA ESHFNT000028117000578623001000000000000000000000000007</span></div>
+      <div class="option" data-value="alcala-verde"><div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB VERDE</div><span class="nrua">NRUA ESHFNT00002811700057862300200000000000000000000000006</span></div>
+      <div class="option" data-value="alcala-amarilla"><div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB AMARILLA</div><span class="nrua">NRUA ESHFNT00002811700057862300300000000000000000000000005</span></div>
+      <div class="option" data-value="vallejo-1"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 1</div><span class="nrua">NRUA ESHFNT00002811700042449400100000000000000000000000003</span></div>
+      <div class="option" data-value="vallejo-2"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 2</div><span class="nrua">NRUA ESHFNT00002811700042449400200000000000000000000000002</span></div>
+      <div class="option" data-value="vallejo-3"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 3</div><span class="nrua">NRUA ESHFNT00002811700042449400300000000000000000000000001</span></div>
+      <div class="option" data-value="vallejo-4"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 4</div><span class="nrua">NRUA ESHFNT00002811700042449400400000000000000000000000000</span></div>
+      <div class="option" data-value="vallejo-5"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 5</div><span class="nrua">NRUA ESHFNT00002811700042449400500000000000000000000000009</span></div>
     </div>
   </div>
   
   <h3>Segunda. Finalidad temporal del arrendamiento</h3>
   <p>El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
   <div class="purpose-list">
-    <p>[ ] Trabajo temporal</p>
-    <p>[ ] Estudios</p>
-    <p>[ ] Tratamiento médico</p>
-    <p>[ ] Motivos personales / familiares</p>
-    <p>Otros <span class="placeholder">[Especificar]</span></p>
+    <div class="purpose-option">
+        <input type="radio" id="purpose-trabajo" name="purpose" value="Trabajo temporal"><label for="purpose-trabajo">Trabajo temporal</label>
+    </div>
+    <div class="purpose-option">
+        <input type="radio" id="purpose-estudios" name="purpose" value="Estudios"><label for="purpose-estudios">Estudios</label>
+    </div>
+    <div class="purpose-option">
+        <input type="radio" id="purpose-medico" name="purpose" value="Tratamiento médico"><label for="purpose-medico">Tratamiento médico</label>
+    </div>
+    <div class="purpose-option">
+        <input type="radio" id="purpose-personal" name="purpose" value="Motivos personales / familiares"><label for="purpose-personal">Motivos personales / familiares</label>
+    </div>
+    <div class="purpose-option">
+        <input type="radio" id="purpose-otros" name="purpose" value="Otros">
+        <label for="purpose-otros">
+            Otros
+            <input type="text" id="purpose-otros-details" class="placeholder" placeholder="Especificar motivo" maxlength="50">
+        </label>
+    </div>
   </div>
   <p>Conforme al artículo 3 de la Ley de Arrendamientos Urbanos, este contrato no se rige por las disposiciones aplicables al arrendamiento de vivienda habitual.</p>
   
   <h3>Tercera. Duración</h3>
-  <p>El presente contrato tendrá una duración desde el día <span class="placeholder">[Fecha de inicio]</span> hasta el día <span class="placeholder">[Fecha de finalización]</span>, sin posibilidad de prórroga tácita, salvo acuerdo expreso.</p>
+  <p>El presente contrato tendrá una duración desde el día <input type="date" class="placeholder" id="fechaInicio"> hasta el día <input type="date" class="placeholder" id="fechaFin">, sin posibilidad de prórroga tácita, salvo acuerdo expreso.</p>
   
   <h3>Cuarta. Renta y forma de pago</h3>
-  <p>El precio del arrendamiento ha sido acordado y satisfecho íntegramente a través de la plataforma digital: <span class="placeholder">[Nombre de la plataforma]</span>.</p>
+  <p>El precio del arrendamiento ha sido acordado y satisfecho íntegramente a través de la plataforma digital AIRBNB.</p>
   <p>Dicha plataforma incluye tasas e impuestos en la gestión del pago. Las partes reconocen haber aceptado las condiciones económicas en dicha plataforma.</p>
   
   <h3>Quinta. Fianza</h3>
@@ -289,7 +216,6 @@
       <canvas height="200" id="firmaArrendadora" width="300"></canvas>
       <button class="clear-signature-btn" data-canvas-id="firmaArrendadora">Borrar Firma</button>
     </div>
-    
     <div class="signature-section">
       <p>LA PARTE ARRENDATARIA:</p>
       <canvas height="200" id="firmaArrendataria" width="300"></canvas>
@@ -318,21 +244,15 @@
 
   // --- Signature Pad Logic ---
   const signaturePads = {};
-
   ['firmaArrendadora', 'firmaArrendataria'].forEach(id => {
     const canvas = document.getElementById(id);
-    canvas.signaturePad = new SignaturePad(canvas, {
-      backgroundColor: 'rgba(252, 252, 252, 1)'
-    });
+    canvas.signaturePad = new SignaturePad(canvas, { backgroundColor: 'rgba(252, 252, 252, 1)' });
     signaturePads[id] = canvas.signaturePad;
   });
-
   document.querySelectorAll('.clear-signature-btn').forEach(button => {
     button.addEventListener('click', (event) => {
       const canvasId = event.target.dataset.canvasId;
-      if (signaturePads[canvasId]) {
-        signaturePads[canvasId].clear();
-      }
+      if (signaturePads[canvasId]) { signaturePads[canvasId].clear(); }
     });
   });
   
@@ -342,7 +262,6 @@
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext("2d").scale(ratio, ratio);
   }
-  
   function clearAndResize() {
       document.querySelectorAll('canvas').forEach(canvas => {
           if (canvas.signaturePad) {
@@ -352,11 +271,22 @@
           }
       });
   }
-
   window.addEventListener("resize", clearAndResize);
-  
   document.querySelectorAll('canvas').forEach(resizeCanvas);
 
+  // --- Logic para mostrar/ocultar el campo "Otros" ---
+  const purposeRadios = document.querySelectorAll('input[name="purpose"]');
+  const otrosDetailsInput = document.getElementById('purpose-otros-details');
+  purposeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (document.getElementById('purpose-otros').checked) {
+        otrosDetailsInput.style.display = 'inline-block';
+      } else {
+        otrosDetailsInput.style.display = 'none';
+        otrosDetailsInput.value = ''; // Limpiar el campo si se selecciona otra opción
+      }
+    });
+  });
 </script>
 
 </body>
