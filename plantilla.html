@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contrato de Alojamiento Temporal</title>
   <style type="text/css">
-    /* --- GLOBAL STYLES --- */
+    /* --- ESTILOS PARA LA PANTALLA --- */
     :root {
       --primary-color: #005a9c;
       --secondary-color: #333;
@@ -29,7 +29,6 @@
       padding: 2rem 1rem;
     }
 
-    /* --- CONTAINER --- */
     .contract-container {
       max-width: 800px;
       margin: 0 auto;
@@ -39,7 +38,6 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     }
 
-    /* --- TYPOGRAPHY --- */
     h1 {
       font-size: 1.8rem;
       font-weight: 700;
@@ -90,121 +88,103 @@
       border-bottom: 2px solid var(--border-color);
     }
     
+    /* --- SECCIÓN DE FIRMAS --- */
+    .signatures-container {
+        display: flex;
+        justify-content: space-around;
+        gap: 2rem;
+        flex-wrap: wrap; /* Para que se apilen en pantallas pequeñas */
+        margin-top: 2rem;
+    }
+
+    .signature-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .signature-section p {
         font-weight: 600;
         color: var(--secondary-color);
-        margin-top: 2rem;
         margin-bottom: 0.5rem;
     }
 
-    /* --- DROPDOWN STYLES --- */
-    .dropdown {
-      position: relative;
-      width: 100%;
-    }
-
-    .dropdown-toggle {
-      padding: 12px 15px;
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      background-color: #fff;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: border-color 0.2s;
-      text-align: left;
-    }
-
-    .dropdown-toggle:hover {
-        border-color: var(--primary-color);
-    }
-
-    .dropdown-toggle::after {
-        content: '▼';
-        font-size: 0.8em;
-        color: #888;
-        margin-left: 10px;
-    }
-
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: #fff;
-      border: 1px solid var(--border-color);
-      border-top: none;
-      max-height: 250px;
-      overflow-y: auto;
-      display: none;
-      z-index: 1000;
-      border-radius: 0 0 6px 6px;
-      box-shadow: 0 8px 10px rgba(0,0,0,0.1);
-    }
-
-    .dropdown-menu .option {
-      padding: 12px 15px;
-      border-bottom: 1px solid #f0f0f0;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    
-    .dropdown-menu .option:last-child {
-        border-bottom: none;
-    }
-
-    .dropdown-menu .option:hover {
-      background-color: var(--light-gray);
-    }
-
-    .direccion {
-      font-weight: bold;
-      color: var(--secondary-color);
-    }
-
-    .nrua {
-      font-size: 0.85em;
-      color: #666;
-      margin-top: 4px;
-      display: block; /* Ensures it goes to the next line */
-    }
-
-    /* --- PURPOSE LIST STYLES --- */
-    .purpose-list {
-        background-color: #f9f9f9;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        padding: 1rem 1.5rem;
-    }
-    
-    .purpose-list p {
-        margin-bottom: 0.5rem;
-    }
-    
-    /* --- SIGNATURE CANVAS --- */
     canvas {
-        width: 300px;  /* Fixed width */
-        height: 200px; /* Fixed height */
+        width: 300px;
+        height: 200px;
         border: 2px dashed var(--border-color);
         border-radius: 8px;
         cursor: crosshair;
         background-color: #fcfcfc;
-        margin-bottom: 1rem;
     }
 
+    .clear-signature-btn {
+        margin-top: 0.5rem;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        color: #777;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    .clear-signature-btn:hover {
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+    /* --- DROPDOWN --- */
+    .dropdown { position: relative; width: 100%; }
+    .dropdown-toggle { padding: 12px 15px; border: 1px solid var(--border-color); cursor: pointer; background-color: #fff; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; transition: border-color 0.2s; text-align: left; }
+    .dropdown-toggle:hover { border-color: var(--primary-color); }
+    .dropdown-toggle::after { content: '▼'; font-size: 0.8em; color: #888; margin-left: 10px; }
+    .dropdown-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid var(--border-color); border-top: none; max-height: 250px; overflow-y: auto; display: none; z-index: 1000; border-radius: 0 0 6px 6px; box-shadow: 0 8px 10px rgba(0,0,0,0.1); }
+    .dropdown-menu .option { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background-color 0.2s; }
+    .dropdown-menu .option:last-child { border-bottom: none; }
+    .dropdown-menu .option:hover { background-color: var(--light-gray); }
+    .direccion { font-weight: bold; color: var(--secondary-color); }
+    .nrua { font-size: 0.85em; color: #666; margin-top: 4px; display: block; }
+    .purpose-list { background-color: #f9f9f9; border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem 1.5rem; }
+    .purpose-list p { margin-bottom: 0.5rem; }
+
     @media (max-width: 768px) {
+        body { padding: 1rem 0.5rem; }
+        .contract-container { padding: 1.5rem; }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.2rem; }
+    }
+    
+    /* --- ESTILOS PARA IMPRESIÓN --- */
+    @media print {
         body {
-            padding: 1rem 0.5rem;
+            font-size: 10pt; line-height: 1.3; padding: 0; background-color: #fff; color: #000;
         }
         .contract-container {
-            padding: 1.5rem;
+            max-width: 100%; padding: 0; box-shadow: none; border-radius: 0; margin: 0;
         }
-        h1 {
-            font-size: 1.5rem;
+        h1, h2, h3 {
+            color: #000 !important; margin-top: 1.2em; margin-bottom: 0.6em; padding-bottom: 0.2em;
         }
-        h2 {
-            font-size: 1.2rem;
+        h1 { font-size: 15pt; }
+        h2 { font-size: 12pt; }
+        h3 { font-size: 11pt; border-bottom: 1px solid #ccc; }
+        p { margin-bottom: 0.8em; }
+        .party-info, .purpose-list {
+            padding: 0.5em 0.8em; margin-bottom: 0.8em; background-color: #f0f0f0 !important; border: 1px solid #ddd;
+        }
+        .placeholder {
+            background-color: #e0e0e0; padding: 0.1em 0.3em; border-bottom: 1px solid #999;
+        }
+        .dropdown-toggle { border: none; padding: 0; }
+        .dropdown-toggle::after { display: none; }
+        .signatures-container {
+            page-break-inside: avoid; /* Evita que las firmas se dividan entre páginas */
+        }
+        canvas { border: 1px solid #333; }
+        
+        .clear-signature-btn {
+            display: none !important;
         }
     }
   </style>
@@ -216,26 +196,22 @@
   <p style="text-align:right;">En Madrid, a <span class="placeholder">[Fecha]</span></p>
 
   <h2>REUNIDOS</h2>
-
   <div class="party-info">
     <p>
       <strong>De una parte, D./D.ª Nina Dong</strong>, mayor de edad, con domicilio en <span class="placeholder">[Dirección]</span>, y con NIF 05298495P, en adelante, la <strong>Parte Arrendadora</strong>.
     </p>
   </div>
-  
   <div class="party-info">
     <p>
       <strong>Y de otra, D./D.ª <span class="placeholder">[Nombre del arrendatario]</span></strong>, mayor de edad, con domicilio en <span class="placeholder">[Dirección]</span>, y con NIF/PASAPORTE <span class="placeholder">[NIF del arrendatario]</span>, en adelante, la <strong>Parte Arrendataria</strong>.
     </p>
   </div>
-  
   <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
-
+  
   <h2>CLÁUSULAS</h2>
-
+  
   <h3>Primera. Objeto del contrato</h3>
   <p>La Parte Arrendadora cede en arrendamiento a la Parte Arrendataria, quien acepta, la unidad de alojamiento ubicada en:</p>
-
   <div class="dropdown" id="alojDropdown">
     <div class="dropdown-toggle" id="selectedOption">Haz clic para seleccionar alojamiento</div>
     <div class="dropdown-menu" id="dropdownMenu">
@@ -273,7 +249,7 @@
       </div>
     </div>
   </div>
-
+  
   <h3>Segunda. Finalidad temporal del arrendamiento</h3>
   <p>El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
   <div class="purpose-list">
@@ -284,37 +260,41 @@
     <p>Otros <span class="placeholder">[Especificar]</span></p>
   </div>
   <p>Conforme al artículo 3 de la Ley de Arrendamientos Urbanos, este contrato no se rige por las disposiciones aplicables al arrendamiento de vivienda habitual.</p>
-
+  
   <h3>Tercera. Duración</h3>
   <p>El presente contrato tendrá una duración desde el día <span class="placeholder">[Fecha de inicio]</span> hasta el día <span class="placeholder">[Fecha de finalización]</span>, sin posibilidad de prórroga tácita, salvo acuerdo expreso.</p>
-
+  
   <h3>Cuarta. Renta y forma de pago</h3>
   <p>El precio del arrendamiento ha sido acordado y satisfecho íntegramente a través de la plataforma digital: <span class="placeholder">[Nombre de la plataforma]</span>.</p>
   <p>Dicha plataforma incluye tasas e impuestos en la gestión del pago. Las partes reconocen haber aceptado las condiciones económicas en dicha plataforma.</p>
-
+  
   <h3>Quinta. Fianza</h3>
   <p>Al tratarse del arrendamiento temporal de una habitación ubicada dentro de la vivienda habitual de la parte arrendadora, las partes acuerdan no establecer fianza alguna.</p>
   <p>Esta exención se realiza conforme al carácter temporal del arrendamiento y la naturaleza del uso compartido del inmueble, en ejercicio de la libertad contractual reconocida por la normativa civil vigente.</p>
-
+  
   <h3>Sexta. Uso y conservación</h3>
   <p>El arrendatario usará el alojamiento exclusivamente como vivienda temporal, sin realizar actividades molestas o ilegales.</p>
-
+  
   <h3>Séptima. Protección de datos personales</h3>
   <p>En cumplimiento del RGPD y LOPDGDD, se informa que los datos personales se tratarán para la gestión del arrendamiento y podrán comunicarse al Registro y la Ventanilla Única Digital. El arrendatario podrá ejercer sus derechos de protección de datos.</p>
-
+  
   <h3>Octava. Legislación aplicable</h3>
   <p>Este contrato se rige por el Código Civil, la LAU, el Real Decreto 1312/2024 y normativa aplicable.</p>
 
   <p style="text-align:center; margin-top: 3rem;">Firmado por duplicado en el lugar y fecha indicados.</p>
 
-  <div class="signature-section">
+  <div class="signatures-container">
+    <div class="signature-section">
       <p>LA PARTE ARRENDADORA:</p>
       <canvas height="200" id="firmaArrendadora" width="300"></canvas>
-  </div>
-  
-  <div class="signature-section">
+      <button class="clear-signature-btn" data-canvas-id="firmaArrendadora">Borrar Firma</button>
+    </div>
+    
+    <div class="signature-section">
       <p>LA PARTE ARRENDATARIA:</p>
       <canvas height="200" id="firmaArrendataria" width="300"></canvas>
+      <button class="clear-signature-btn" data-canvas-id="firmaArrendataria">Borrar Firma</button>
+    </div>
   </div>
 
 </div>
@@ -325,71 +305,57 @@
   const toggle = document.getElementById('selectedOption');
   const menu = document.getElementById('dropdownMenu');
   const options = document.querySelectorAll('.option');
-
-  toggle.addEventListener('click', () => {
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  });
-
+  toggle.addEventListener('click', () => { menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
   options.forEach(option => {
     option.addEventListener('click', () => {
       const direccion = option.querySelector('.direccion').textContent;
       const nrua = option.querySelector('.nrua').textContent;
-      
-      // CAMBIO: Se envuelve el contenido en un div para que el flexbox del toggle
-      // lo trate como un solo bloque, permitiendo que el contenido interno fluya verticalmente.
       toggle.innerHTML = '<div><div class="direccion">' + direccion + '</div><span class="nrua">' + nrua + '</span></div>';
       menu.style.display = 'none';
     });
   });
-
-  window.addEventListener('click', e => {
-    if (!document.getElementById('alojDropdown').contains(e.target)) {
-      menu.style.display = 'none';
-    }
-  });
+  window.addEventListener('click', e => { if (!document.getElementById('alojDropdown').contains(e.target)) { menu.style.display = 'none'; } });
 
   // --- Signature Pad Logic ---
-  const canvas1 = document.getElementById('firmaArrendadora');
-  const firma1 = new SignaturePad(canvas1, {
-      backgroundColor: 'rgba(252, 252, 252, 1)' // Match canvas CSS background
+  const signaturePads = {};
+
+  ['firmaArrendadora', 'firmaArrendataria'].forEach(id => {
+    const canvas = document.getElementById(id);
+    canvas.signaturePad = new SignaturePad(canvas, {
+      backgroundColor: 'rgba(252, 252, 252, 1)'
+    });
+    signaturePads[id] = canvas.signaturePad;
   });
 
-  const canvas2 = document.getElementById('firmaArrendataria');
-  const firma2 = new SignaturePad(canvas2, {
-      backgroundColor: 'rgba(252, 252, 252, 1)'
+  document.querySelectorAll('.clear-signature-btn').forEach(button => {
+    button.addEventListener('click', (event) => {
+      const canvasId = event.target.dataset.canvasId;
+      if (signaturePads[canvasId]) {
+        signaturePads[canvasId].clear();
+      }
+    });
   });
   
-  // Adjust canvas size to be HiDPI/Retina aware
   function resizeCanvas(canvas) {
     const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    // Usa offsetWidth/Height del CSS para calcular el tamaño real del buffer
     canvas.width = canvas.offsetWidth * ratio;
     canvas.height = canvas.offsetHeight * ratio;
     canvas.getContext("2d").scale(ratio, ratio);
   }
   
-  // Limpiar el contenido del canvas si la ventana cambia de tamaño
   function clearAndResize() {
-      // Para cada canvas
-      [canvas1, canvas2].forEach(canvas => {
-          // Guardar la firma actual
-          const data = canvas.signaturePad.toData();
-          // Redimensionar
-          resizeCanvas(canvas);
-          // Restaurar la firma
-          canvas.signaturePad.fromData(data);
+      document.querySelectorAll('canvas').forEach(canvas => {
+          if (canvas.signaturePad) {
+            const data = canvas.signaturePad.toData();
+            resizeCanvas(canvas);
+            canvas.signaturePad.fromData(data);
+          }
       });
   }
 
-  // Asociar SignaturePad a cada canvas para acceder a el en la función de redimensionado
-  canvas1.signaturePad = firma1;
-  canvas2.signaturePad = firma2;
-
   window.addEventListener("resize", clearAndResize);
   
-  // Redimensionado inicial
-  resizeCanvas(canvas1);
-  resizeCanvas(canvas2);
+  document.querySelectorAll('canvas').forEach(resizeCanvas);
 
 </script>
 
