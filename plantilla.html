@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es" xml:lang="es" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -134,9 +136,11 @@
         }
     }
   </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-
+<div id="divToExport">
 <div class="contract-container">
   <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
   <p style="text-align:right;">En Madrid, a <input type="date" class="placeholder" id="fechaContrato"></p>
@@ -144,7 +148,7 @@
   <h2>REUNIDOS</h2>
   <div class="party-info">
     <p>
-      <strong>De una parte, D./D.ª Nina Dong</strong>, mayor de edad, con domicilio en <span class="placeholder">Rd. Calabasa 11 , 28043 Madrid</span>, y con NIF <span class="placeholder">05298495P</span>, en adelante, la <strong>Parte Arrendadora</strong>.
+      <strong>De una parte, D./D.ª Nina Dong</strong>, mayor de edad, con domicilio en Rd. Calabasa 11 , 28043 Madrid , y con NIF  05298495P , en adelante, la <strong>Parte Arrendadora</strong>.
     </p>
   </div>
   <div class="party-info">
@@ -231,9 +235,9 @@
       <button class="clear-signature-btn" data-canvas-id="firmaArrendataria">Borrar Firma</button>
     </div>
   </div>
-
+<button type="button" onclick="generatePDF()" class="clear-signature-btn">Export to PDF</button>
 </div>
-
+</div>
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
 <script>
   // --- Dropdown Logic ---
@@ -264,7 +268,23 @@
       if (signaturePads[canvasId]) { signaturePads[canvasId].clear(); }
     });
   });
-  
+  function generatePDF() {
+      
+      // Choose the element id which you want to export.
+      var element = document.getElementById('divToExport');
+      element.style.width = '810px';
+      element.style.height = '2500px';
+      var opt = {
+          margin:       0.3,
+          filename:     'myfile.pdf',
+          image:        { type: 'jpeg', quality: 1 },
+          html2canvas:  { scale: 1 },
+          jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait',precision: '12' }
+        };
+      
+      // choose the element and pass it to html2pdf() function and call the save() on it to save as pdf.
+      html2pdf().set(opt).from(element).save();
+    }
   function resizeCanvas(canvas) {
     const ratio = Math.max(window.devicePixelRatio || 1, 1);
     canvas.width = canvas.offsetWidth * ratio;
@@ -318,6 +338,6 @@
   });
 
 </script>
-
+<a href=https://pableitor.github.io/rent-contract/plantilla.html>https://pableitor.github.io/rent-contract/plantilla.html</a>
 </body>
 </html>
