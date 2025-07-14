@@ -280,16 +280,36 @@
     });
   });
   function generatePDF() {
+	// genera imagen del contrato
 	html2canvas(document.querySelector("#divToExport")).then(canvas => {
-    		document.body.appendChild(canvas)
+    		//document.body.appendChild(canvas)
+	var base64image = canvas.toDataURL("image/png");
+
+    // Open the image in a new window
+    	window.open(base64image , "_blank");
 	});
+
+    // html2canvas(document.querySelector("#divToExport"),
+    //     {
+    //         onrendered: function(canvas){
+    //             var imgData = canvas.toDataURL("image/jpeg");
+    //             var a = document.createElement('a');
+    //             var doc = new jsPDF('p','mm');
+    //             doc.addImage(imgData, 'JPEG', 15, 40, 180, 160);
+    //             doc.save($.now()+'.pdf');
+
+    //     }
+    // });
+
+
+	  
       // Choose the element id which you want to export.
       var element = document.getElementById('divToExport');
       element.style.width = '810px';
       element.style.height = '2500px';
       var opt = {
           margin:       0.3,
-          filename:     'myfile.pdf',
+          filename:     'contract.pdf',
           image:        { type: 'png', quality: 1 },
           html2canvas:  { scale: 1 },
           jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait',precision: '12' }
