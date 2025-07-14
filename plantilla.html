@@ -283,7 +283,7 @@
 	// genera imagen del contrato
 	html2canvas(document.querySelector("#divToExport")).then(canvas => {
     		//document.body.appendChild(canvas)
-	var base64image = canvas.toDataURL("image/png");
+	var base64image = canvas.toDataURL("img/jpg");
 
     // Open the image in a new window
     	window.open(base64image , "_blank");
