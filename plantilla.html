@@ -136,8 +136,19 @@
         }
     }
   </style>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "F3TxaJUcv0LRZLFu3",
+      });
+   })();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+ <script type="text/javascript" src="html2canvas.js"></script>
 </head>
 <body>
 <div id="divToExport">
@@ -269,7 +280,9 @@
     });
   });
   function generatePDF() {
-      
+	html2canvas(document.querySelector("#divToExport")).then(canvas => {
+    		document.body.appendChild(canvas)
+	});
       // Choose the element id which you want to export.
       var element = document.getElementById('divToExport');
       element.style.width = '810px';
@@ -277,7 +290,7 @@
       var opt = {
           margin:       0.3,
           filename:     'myfile.pdf',
-          image:        { type: 'jpeg', quality: 1 },
+          image:        { type: 'png', quality: 1 },
           html2canvas:  { scale: 1 },
           jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait',precision: '12' }
         };
