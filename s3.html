@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo subir PDF a S3</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1414.0/dist/aws-sdk.min.js"></script>
+  <style>
+    #contrato {
+      width: 500px;
+      margin: auto;
+      padding: 20px;
+      border: 2px dashed #aaa;
+      background: #f8f8f8;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="contrato">
+  <h2>Contrato de Prueba</h2>
+  <p>Nombre del inquilino: <strong>Juan Pérez</strong></p>
+  <p>Dirección: Calle Falsa 123</p>
+  <p>Fecha: 24 de julio de 2025</p>
+</div>
+
+<button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
+
+<script>
+  AWS.config.region = 'eu-south-2';
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'eu-south-2:e70e5ae2-2635-4445-9bb6-abd20a1264b4'
+  });
+
+  function subirPDFaS3() {
+    const element = document.getElementById('contrato');
+
+    const options = {
+      margin: 0.5,
+      filename: 'contrato.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().from(element).set(options).outputPdf('blob').then(function (blob) {
+      const fileName = 'contrato-' + Date.now() + '.pdf';
+
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: { Bucket: 'contratos-pdf-pablo' } // 👈 REEMPLAZAR
+      });
+
+      const params = {
+        Key: fileName,
+        ContentType: 'application/pdf',
+        Body: blob,
+      };
+
+      s3.upload(params, function (err, data) {
+        if (err) {
+          console.error('❌ Error al subir:', err);
+          alert("❌ Error al subir el PDF.");
+        } else {
+          console.log('✅ PDF subido a S3:', data.Location);
+          alert("✅ PDF subido correctamente:\n" + data.Location);
+        }
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
