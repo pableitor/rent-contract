@@ -139,13 +139,8 @@
 <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
 </script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "F3TxaJUcv0LRZLFu3",
-      });
-   })();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1414.0/dist/aws-sdk.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
  <script type="text/javascript" src="html2canvas.js"></script>
@@ -353,6 +348,54 @@
   });
 
 </script>
+
+
+<script>
+AWS.config.region = 'eu-south-2'; // tu región
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'eu-south-2:e70e5ae2-2635-4445-9bb6-abd20a1264b4'
+});
+
+function subirPDFaS3() {
+  const element = document.getElementById('contrato');
+
+  const options = {
+    margin:       0.5,
+    filename:     'contrato.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  html2pdf().from(element).set(options).outputPdf('blob').then(function (blob) {
+    const fileName = 'contrato-' + Date.now() + '.pdf';
+
+    const s3 = new AWS.S3({
+      params: { Bucket: 'contratos-pdf-pablo' }
+    });
+
+    const params = {
+      Key: fileName,
+      ContentType: 'application/pdf',
+      Body: blob,
+      ACL: 'public-read'
+    };
+
+    s3.upload(params, function(err, data) {
+      if (err) {
+        console.error('❌ Error al subir:', err);
+        alert("Error al subir PDF a S3");
+      } else {
+        console.log('✅ Subido a S3:', data.Location);
+        alert("PDF subido correctamente. Enlace:\n" + data.Location);
+      }
+    });
+  });
+}
+</script>
+
+<button onclick="subirPDFaS3()">Subir PDF a S3</button>
+	
 <a href=https://pableitor.github.io/rent-contract/plantilla.html>https://pableitor.github.io/rent-contract/plantilla.html</a>
 </body>
 </html>
