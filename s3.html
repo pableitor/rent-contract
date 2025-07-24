@@ -71,6 +71,12 @@
         } else {
           console.log('✅ PDF subido a S3:', data.Location);
           alert("✅ PDF subido correctamente:\n" + data.Location);
+          // Copiar la URL al portapapeles
+          navigator.clipboard.writeText(data.Location).then(function () {
+            console.log('📋 Enlace copiado al portapapeles');
+          }, function (err) {
+            console.warn('⚠️ No se pudo copiar el enlace:', err);
+          });
         }
       });
     });
