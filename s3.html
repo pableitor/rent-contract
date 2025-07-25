@@ -33,12 +33,23 @@
 
 <button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
 
+<div id="resultado" style="text-align: center; display: none; margin-top: 20px;">
+  <input id="urlPdf" type="text" readonly style="width: 80%; padding: 8px;" />
+  <button onclick="copiarLink()">📋 Copiar</button>
+</div>
+
+
 <script>
   AWS.config.region = 'eu-south-2';
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'eu-south-2:e70e5ae2-2635-4445-9bb6-abd20a1264b4'
   });
-
+  function copiarLink() {
+    const urlInput = document.getElementById('urlPdf');
+    urlInput.select();
+    document.execCommand('copy'); // Para compatibilidad amplia
+    alert('📋 Enlace copiado al portapapeles');
+  }
   function subirPDFaS3() {
     const element = document.getElementById('contrato');
 
@@ -70,13 +81,12 @@
           alert("❌ Error al subir el PDF.");
         } else {
           console.log('✅ PDF subido a S3:', data.Location);
-          alert("✅ PDF subido correctamente:\n" + data.Location);
-          // Copiar la URL al portapapeles
-          navigator.clipboard.writeText(data.Location).then(function () {
-            console.log('📋 Enlace copiado al portapapeles');
-          }, function (err) {
-            console.warn('⚠️ No se pudo copiar el enlace:', err);
-          });
+
+          const urlInput = document.getElementById('urlPdf');
+          urlInput.value = data.Location;
+
+          const resultado = document.getElementById('resultado');
+          resultado.style.display = 'block';
         }
       });
     });
