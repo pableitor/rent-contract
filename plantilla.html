@@ -163,7 +163,7 @@
   </div>
   <div class="party-info">
     <p>
-      <strong>Y de otra, D./D.ª <input type="text" class="placeholder"  maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input"  maxlength="100">, y con NIF/PASAPORTE <input type="text" class="placeholder"  maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
+      <strong>Y de otra, D./D.ª <input type="text" class="placeholder" id="guestname" maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input"  maxlength="100">, y con NIF/PASAPORTE <input type="text" class="placeholder"  maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
     </p>
   </div>
   <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
@@ -341,7 +341,8 @@
     };
 
     html2pdf().from(element).set(options).outputPdf('blob').then(function (blob) {
-      const fileName = 'contrato-' + Date.now() + '.pdf';
+      const guest = document.getElementById('guestname').value.trim().replace(/ /g, "_");
+      const fileName = 'contrato-' + guest + Date.now() + '.pdf';
 
       const s3 = new AWS.S3({
         apiVersion: '2006-03-01',
@@ -383,7 +384,7 @@
     alert("Introduce un número de reserva válido.");
     return;
   }
-  const url = `https://www.airbnb.es/hosting/messages/${reserva}`;
+  const url = `https://www.airbnb.es/hosting/stay/${reserva}`;
   window.open(url, '_blank');
 }
 </script>
