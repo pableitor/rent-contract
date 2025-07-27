@@ -146,7 +146,11 @@
  <script type="text/javascript" src="html2canvas.js"></script>
 </head>
 <body>
-
+<div style="max-width: 800px; margin: auto; margin-bottom: 20px; text-align: center;">
+  <label for="reservaId"><strong>Num. Reserva Airbnb:</strong></label>
+  <input type="text" id="reservaId"  style="margin-left: 10px; padding: 6px; width: 250px;">
+  <button onclick="abrirReserva()" style="margin-left: 10px; padding: 6px 12px;">🔍 Abrir</button>
+</div>
 <div class="contract-container" id="contrato">
   <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
   <p style="text-align:right;">En Madrid, a <input type="date" class="placeholder" id="fechaContrato"></p>
@@ -159,7 +163,7 @@
   </div>
   <div class="party-info">
     <p>
-      <strong>Y de otra, D./D.ª <input type="text" class="placeholder" placeholder="Nombre y apellidos" maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" placeholder="Dirección completa" maxlength="100">, y con NIF/PASAPORTE <input type="text" class="placeholder" placeholder="NIF o Pasaporte" maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
+      <strong>Y de otra, D./D.ª <input type="text" class="placeholder"  maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input"  maxlength="100">, y con NIF/PASAPORTE <input type="text" class="placeholder"  maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
     </p>
   </div>
   <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
@@ -168,19 +172,7 @@
   
   <h3>Primera. Objeto del contrato</h3>
   <p>La Parte Arrendadora cede en arrendamiento a la Parte Arrendataria, quien acepta, la unidad de alojamiento ubicada en:</p>
-  <div class="dropdown" id="alojDropdown">
-    <div class="dropdown-toggle" id="selectedOption">Haz clic para seleccionar alojamiento</div>
-    <div class="dropdown-menu" id="dropdownMenu">
-      <div class="option" data-value="alcala-roja"><div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB ROJA</div><span class="nrua">NRUA ESHFNT000028117000578623001000000000000000000000000007</span></div>
-      <div class="option" data-value="alcala-verde"><div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB VERDE</div><span class="nrua">NRUA ESHFNT00002811700057862300200000000000000000000000006</span></div>
-      <div class="option" data-value="alcala-amarilla"><div class="direccion">C/ALCALA 281 1ºJ 28027 MADRID, HAB AMARILLA</div><span class="nrua">NRUA ESHFNT00002811700057862300300000000000000000000000005</span></div>
-      <div class="option" data-value="vallejo-1"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 1</div><span class="nrua">NRUA ESHFNT00002811700042449400100000000000000000000000003</span></div>
-      <div class="option" data-value="vallejo-2"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 2</div><span class="nrua">NRUA ESHFNT00002811700042449400200000000000000000000000002</span></div>
-      <div class="option" data-value="vallejo-3"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 3</div><span class="nrua">NRUA ESHFNT00002811700042449400300000000000000000000000001</span></div>
-      <div class="option" data-value="vallejo-4"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 4</div><span class="nrua">NRUA ESHFNT00002811700042449400400000000000000000000000000</span></div>
-      <div class="option" data-value="vallejo-5"><div class="direccion">C/DOCTOR VALLEJO 35 2ºA 28027 MADRID, HAB 5</div><span class="nrua">NRUA ESHFNT00002811700042449400500000000000000000000000009</span></div>
-    </div>
-  </div>
+ <input type="text" class="placeholder full-width-input"  maxlength="100">
   
   <h3>Segunda. Finalidad temporal del arrendamiento</h3>
   <p>El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
@@ -201,7 +193,7 @@
         <input type="radio" id="purpose-otros" name="purpose" value="Otros">
         <label for="purpose-otros">
             Otros
-            <input type="text" id="purpose-otros-details" class="placeholder" placeholder="Especificar motivo" maxlength="50">
+            <input type="text" id="purpose-otros-details" class="placeholder"  maxlength="50">
         </label>
     </div>
   </div>
@@ -254,6 +246,10 @@
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
 	
 <script>
+
+
+
+
   // --- Dropdown Logic ---
   const toggle = document.getElementById('selectedOption');
   const menu = document.getElementById('dropdownMenu');
@@ -396,6 +392,16 @@
     const enlace = `https://wa.me/?text=${mensaje}`;
     window.open(enlace, '_blank');
   }
+
+  function abrirReserva() {
+  const reserva = document.getElementById('reservaId').value.trim();
+  if (!reserva) {
+    alert("Introduce un número de reserva válido.");
+    return;
+  }
+  const url = `https://www.airbnb.es/hosting/messages/${reserva}`;
+  window.open(url, '_blank');
+}
 </script>
 
 
