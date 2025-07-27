@@ -146,8 +146,8 @@
  <script type="text/javascript" src="html2canvas.js"></script>
 </head>
 <body>
-<div id="divToExport">
-<div class="contract-container">
+
+<div class="contract-container" id="contrato">
   <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
   <p style="text-align:right;">En Madrid, a <input type="date" class="placeholder" id="fechaContrato"></p>
 
@@ -241,10 +241,17 @@
       <button class="clear-signature-btn" data-canvas-id="firmaArrendataria">Borrar Firma</button>
     </div>
   </div>
-<button type="button" onclick="generatePDF()" class="clear-signature-btn">Export to PDF</button>
 </div>
+
+<button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
+
+<div id="resultado" style="text-align: center; display: none; margin-top: 20px;">
+  <input id="urlPdf" type="text" readonly style="width: 80%; padding: 8px;" />
+  <button onclick="copiarLink()">📋 Copiar</button>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+	
 <script>
   // --- Dropdown Logic ---
   const toggle = document.getElementById('selectedOption');
@@ -274,27 +281,21 @@
       if (signaturePads[canvasId]) { signaturePads[canvasId].clear(); }
     });
   });
-  function generatePDF() {
-	// genera imagen del contrato
-	html2canvas(document.querySelector("#divToExport")).then(canvas => {
-    	document.body.appendChild(canvas)
-	});
-	  
-      // Choose the element id which you want to export.
-      var element = document.getElementById('divToExport');
-      element.style.width = '810px';
-      element.style.height = '2500px';
-      var opt = {
-          margin:       0.3,
-          filename:     'contract.pdf',
-          image:        { type: 'png', quality: 1 },
-          html2canvas:  { scale: 1 },
-          jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait',precision: '12' }
-        };
-      
-      // choose the element and pass it to html2pdf() function and call the save() on it to save as pdf.
-      html2pdf().set(opt).from(element).save();
-    }
+  // --- Logic para mostrar/ocultar el campo "Otros" ---
+  const purposeRadios = document.querySelectorAll('input[name="purpose"]');
+  const otrosDetailsInput = document.getElementById('purpose-otros-details');
+  purposeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (document.getElementById('purpose-otros').checked) {
+        otrosDetailsInput.style.display = 'inline-block';
+      } else {
+        otrosDetailsInput.style.display = 'none';
+        otrosDetailsInput.value = '';
+      }
+    });
+  });
+	
+
   function resizeCanvas(canvas) {
     const ratio = Math.max(window.devicePixelRatio || 1, 1);
     canvas.width = canvas.offsetWidth * ratio;
@@ -312,20 +313,6 @@
   }
   window.addEventListener("resize", clearAndResize);
   document.querySelectorAll('canvas').forEach(resizeCanvas);
-
-  // --- Logic para mostrar/ocultar el campo "Otros" ---
-  const purposeRadios = document.querySelectorAll('input[name="purpose"]');
-  const otrosDetailsInput = document.getElementById('purpose-otros-details');
-  purposeRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-      if (document.getElementById('purpose-otros').checked) {
-        otrosDetailsInput.style.display = 'inline-block';
-      } else {
-        otrosDetailsInput.style.display = 'none';
-        otrosDetailsInput.value = '';
-      }
-    });
-  });
 
   // --- NUEVO SCRIPT: Lógica para impresión compatible con móviles ---
   window.addEventListener('beforeprint', () => {
@@ -351,51 +338,59 @@
 
 
 <script>
-AWS.config.region = 'eu-south-2'; // tu región
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+  AWS.config.region = 'eu-south-2';
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'eu-south-2:e70e5ae2-2635-4445-9bb6-abd20a1264b4'
-});
+  });
+  function copiarLink() {
+    const urlInput = document.getElementById('urlPdf');
+    urlInput.select();
+    document.execCommand('copy'); // Para compatibilidad amplia
+    alert('📋 Enlace copiado al portapapeles');
+  }
+  function subirPDFaS3() {
+    const element = document.getElementById('contrato');
 
-function subirPDFaS3() {
-  const element = document.getElementById('contrato');
-
-  const options = {
-    margin:       0.5,
-    filename:     'contrato.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
-
-  html2pdf().from(element).set(options).outputPdf('blob').then(function (blob) {
-    const fileName = 'contrato-' + Date.now() + '.pdf';
-
-    const s3 = new AWS.S3({
-      params: { Bucket: 'contratos-pdf-pablo' }
-    });
-
-    const params = {
-      Key: fileName,
-      ContentType: 'application/pdf',
-      Body: blob,
-      ACL: 'public-read'
+    const options = {
+      margin: 0.5,
+      filename: 'contrato.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    s3.upload(params, function(err, data) {
-      if (err) {
-        console.error('❌ Error al subir:', err);
-        alert("Error al subir PDF a S3");
-      } else {
-        console.log('✅ Subido a S3:', data.Location);
-        alert("PDF subido correctamente. Enlace:\n" + data.Location);
-      }
+    html2pdf().from(element).set(options).outputPdf('blob').then(function (blob) {
+      const fileName = 'contrato-' + Date.now() + '.pdf';
+
+      const s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+        params: { Bucket: 'contratos-pdf-pablo' } // 👈 REEMPLAZAR
+      });
+
+      const params = {
+        Key: fileName,
+        ContentType: 'application/pdf',
+        Body: blob,
+      };
+
+      s3.upload(params, function (err, data) {
+        if (err) {
+          console.error('❌ Error al subir:', err);
+          alert("❌ Error al subir el PDF.");
+        } else {
+          console.log('✅ PDF subido a S3:', data.Location);
+
+          const urlInput = document.getElementById('urlPdf');
+          urlInput.value = data.Location;
+
+          const resultado = document.getElementById('resultado');
+          resultado.style.display = 'block';
+        }
+      });
     });
-  });
-}
+  }
 </script>
 
-<button onclick="subirPDFaS3()">Subir PDF a S3</button>
-	
-<a href=https://pableitor.github.io/rent-contract/plantilla.html>https://pableitor.github.io/rent-contract/plantilla.html</a>
+
 </body>
 </html>
