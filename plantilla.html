@@ -249,22 +249,6 @@
 
 
 
-
-  // --- Dropdown Logic ---
-  const toggle = document.getElementById('selectedOption');
-  const menu = document.getElementById('dropdownMenu');
-  const options = document.querySelectorAll('.option');
-  toggle.addEventListener('click', () => { menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
-  options.forEach(option => {
-    option.addEventListener('click', () => {
-      const direccion = option.querySelector('.direccion').textContent;
-      const nrua = option.querySelector('.nrua').textContent;
-      toggle.innerHTML = '<div><div class="direccion">' + direccion + '</div><span class="nrua">' + nrua + '</span></div>';
-      menu.style.display = 'none';
-    });
-  });
-  window.addEventListener('click', e => { if (!document.getElementById('alojDropdown').contains(e.target)) { menu.style.display = 'none'; } });
-
   // --- Signature Pad Logic ---
   const signaturePads = {};
   ['firmaArrendadora', 'firmaArrendataria'].forEach(id => {
