@@ -248,6 +248,7 @@
 <div id="resultado" style="text-align: center; display: none; margin-top: 20px;">
   <input id="urlPdf" type="text" readonly style="width: 80%; padding: 8px;" />
   <button onclick="copiarLink()">📋 Copiar</button>
+  <button onclick="compartirWhatsApp()">📲 WhatsApp</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
@@ -388,6 +389,12 @@
         }
       });
     });
+  }
+  function compartirWhatsApp() {
+    const url = document.getElementById('urlPdf').value;
+    const mensaje = encodeURIComponent("📄 Aquí tienes el contrato:\n" + url);
+    const enlace = `https://wa.me/?text=${mensaje}`;
+    window.open(enlace, '_blank');
   }
 </script>
 
