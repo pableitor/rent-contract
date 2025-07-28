@@ -1,97 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Demo subir PDF a S3</title>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1414.0/dist/aws-sdk.min.js"></script>
-  <style>
-    #contrato {
-      width: 500px;
-      margin: auto;
-      padding: 20px;
-      border: 2px dashed #aaa;
-      background: #f8f8f8;
-    }
-    button {
-      display: block;
-      margin: 20px auto;
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrato Airbnb</title>
 </head>
 <body>
+  <div style="text-align:center; margin: 20px;">
+    <label for="reservaId"><strong>Num. Reserva Airbnb:</strong></label>
+    <input type="text" id="reservaId" style="margin-left:10px; padding:6px; width:250px;">
+    <button onclick="abrirReserva()" style="margin-left:10px; padding:6px 12px;">🔍 Abrir</button>
+    <button onclick="importarDatosDesdeExtension()" style="margin-left:10px; padding:6px 12px;">📥 Importar datos</button>
+  </div>
 
-<div id="contrato">
-  <h2>Contrato de Prueba</h2>
-  <p>Nombre del inquilino: <strong>Juan Pérez</strong></p>
-  <p>Dirección: Calle Falsa 123</p>
-  <p>Fecha: 24 de julio de 2025</p>
-</div>
+  <div id="contrato">
+    <p>Nombre del huésped: <input type="text" id="guestname" class="placeholder"></p>
+    <p>Dirección del alojamiento: <input type="text" class="placeholder full-width-input"></p>
+    <p>Desde: <input type="date" id="fechaInicio" class="placeholder"> Hasta: <input type="date" id="fechaFin" class="placeholder"></p>
+  </div>
 
-<button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
+  <button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
 
-<div id="resultado" style="text-align: center; display: none; margin-top: 20px;">
-  <input id="urlPdf" type="text" readonly style="width: 80%; padding: 8px;" />
-  <button onclick="copiarLink()">📋 Copiar</button>
-</div>
-
+  <div id="resultado" style="display:none; text-align:center; margin-top:20px;">
+    <input id="urlPdf" type="text" readonly style="width:80%; padding:8px;">
+    <button onclick="copiarLink()">📋 Copiar</button>
+    <button onclick="compartirWhatsApp()">📲 WhatsApp</button>
+  </div>
 
 <script>
-  AWS.config.region = 'eu-south-2';
-  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: 'eu-south-2:e70e5ae2-2635-4445-9bb6-abd20a1264b4'
-  });
+  function abrirReserva() {
+    const reserva = document.getElementById('reservaId').value.trim();
+    if (!reserva) {
+      alert("Introduce un número de reserva válido.");
+      return;
+    }
+    const url = `https://www.airbnb.es/hosting/stay/${reserva}`;
+    window.open(url, '_blank');
+  }
+
+  function importarDatosDesdeExtension() {
+    if (typeof chrome === 'undefined' || !chrome.storage) {
+      alert('❗ Este botón solo funciona desde una extensión o entorno con permisos de Chrome.');
+      return;
+    }
+
+    chrome.storage.local.get(["nombre", "alojamiento", "fechas"], function (result) {
+      const { nombre, alojamiento, fechas } = result;
+      if (!nombre || !alojamiento || !fechas) {
+        alert("⚠️ No hay datos disponibles. Asegúrate de haber usado la extensión primero.");
+        return;
+      }
+
+      document.getElementById("guestname").value = nombre;
+      const alojamientoField = document.querySelectorAll("input.placeholder.full-width-input")[0];
+      if (alojamientoField) alojamientoField.value = alojamiento;
+
+      const fechasRegex = /(\d{1,2})\s(\w+)\s[\u2013\-]\s(\d{1,2})\s(\w+)/;
+      const match = fechas.match(fechasRegex);
+      if (match) {
+        const diaInicio = match[1];
+        const mesInicio = match[2];
+        const diaFin = match[3];
+        const mesFin = match[4];
+
+        const meses = {
+          "ene": "01", "feb": "02", "mar": "03", "abr": "04",
+          "may": "05", "jun": "06", "jul": "07", "ago": "08",
+          "sept": "09", "oct": "10", "nov": "11", "dic": "12"
+        };
+
+        const añoActual = new Date().getFullYear();
+        const fechaInicio = `${añoActual}-${meses[mesInicio.toLowerCase().slice(0, 3)]}-${diaInicio.padStart(2, '0')}`;
+        const fechaFin = `${añoActual}-${meses[mesFin.toLowerCase().slice(0, 3)]}-${diaFin.padStart(2, '0')}`;
+
+        document.getElementById("fechaInicio").value = fechaInicio;
+        document.getElementById("fechaFin").value = fechaFin;
+      }
+
+      alert("✅ Datos importados desde la extensión");
+    });
+  }
+
+  function subirPDFaS3() {
+    const element = document.getElementById('contrato');
+    const guest = document.getElementById('guestname').value.trim().replace(/ /g, "_");
+    const fileName = 'contrato-' + guest + Date.now() + '.pdf';
+    alert("(Simulación) Se subiría el PDF con nombre: " + fileName);
+    document.getElementById("urlPdf").value = `https://bucket.s3.amazonaws.com/${fileName}`;
+    document.getElementById("resultado").style.display = 'block';
+  }
+
   function copiarLink() {
     const urlInput = document.getElementById('urlPdf');
     urlInput.select();
-    document.execCommand('copy'); // Para compatibilidad amplia
+    document.execCommand('copy');
     alert('📋 Enlace copiado al portapapeles');
   }
-  function subirPDFaS3() {
-    const element = document.getElementById('contrato');
 
-    const options = {
-      margin: 0.5,
-      filename: 'contrato.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-
-    html2pdf().from(element).set(options).outputPdf('blob').then(function (blob) {
-      const fileName = 'contrato-' + Date.now() + '.pdf';
-
-      const s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-        params: { Bucket: 'contratos-pdf-pablo' } // 👈 REEMPLAZAR
-      });
-
-      const params = {
-        Key: fileName,
-        ContentType: 'application/pdf',
-        Body: blob,
-      };
-
-      s3.upload(params, function (err, data) {
-        if (err) {
-          console.error('❌ Error al subir:', err);
-          alert("❌ Error al subir el PDF.");
-        } else {
-          console.log('✅ PDF subido a S3:', data.Location);
-
-          const urlInput = document.getElementById('urlPdf');
-          urlInput.value = data.Location;
-
-          const resultado = document.getElementById('resultado');
-          resultado.style.display = 'block';
-        }
-      });
-    });
+  function compartirWhatsApp() {
+    const url = document.getElementById('urlPdf').value;
+    const mensaje = encodeURIComponent("📄 Aquí tienes el contrato:\n" + url);
+    const enlace = `https://wa.me/?text=${mensaje}`;
+    window.open(enlace, '_blank');
   }
 </script>
-
 </body>
 </html>
