@@ -147,9 +147,10 @@
 </head>
 <body>
 <div style="max-width: 800px; margin: auto; margin-bottom: 20px; text-align: center;">
-  <label for="reservaId"><strong>Num. Reserva Airbnb:</strong></label>
+  <label for="reservaId"><strong>Codigo Reserva Airbnb:</strong></label>
   <input type="text" id="reservaId"  style="margin-left: 10px; padding: 6px; width: 250px;">
   <button onclick="abrirReserva()" style="margin-left: 10px; padding: 6px 12px;">🔍 Abrir</button>
+  <button onclick="importarDatosDesdeExtension()" style="margin-left: 10px; padding: 6px 12px;">📥 Importar datos</button>
 </div>
 <div class="contract-container" id="contrato">
   <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
@@ -319,6 +320,7 @@
 
 
 <script>
+
   AWS.config.region = 'eu-south-2';
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'eu-south-2:e70e5ae2-2635-4445-9bb6-abd20a1264b4'
@@ -387,6 +389,51 @@
   const url = `https://www.airbnb.es/hosting/stay/${reserva}`;
   window.open(url, '_blank');
 }
+function importarDatosDesdeExtension() {
+  if (typeof chrome === 'undefined' || !chrome.storage) {
+    alert('❗ Este botón solo funciona desde una extensión o entorno con permisos de Chrome.');
+    return;
+  }
+
+  chrome.storage.local.get(["nombre", "alojamiento", "fechas"], function (result) {
+    const { nombre, alojamiento, fechas } = result;
+    if (!nombre || !alojamiento || !fechas) {
+      alert("⚠️ No hay datos disponibles. Asegúrate de haber usado la extensión primero.");
+      return;
+    }
+
+    document.getElementById("guestname").value = nombre;
+
+    const alojamientoField = document.querySelectorAll("input.placeholder.full-width-input")[0];
+    if (alojamientoField) alojamientoField.value = alojamiento;
+
+    const fechasRegex = /(\d{1,2})\s(\w+)\s[–-]\s(\d{1,2})\s(\w+)/;
+    const match = fechas.match(fechasRegex);
+    if (match) {
+      const diaInicio = match[1];
+      const mesInicio = match[2];
+      const diaFin = match[3];
+      const mesFin = match[4];
+
+      const meses = {
+        "ene": "01", "feb": "02", "mar": "03", "abr": "04",
+        "may": "05", "jun": "06", "jul": "07", "ago": "08",
+        "sept": "09", "oct": "10", "nov": "11", "dic": "12"
+      };
+
+      const añoActual = new Date().getFullYear();
+
+      const fechaInicio = `${añoActual}-${meses[mesInicio.toLowerCase().slice(0, 3)]}-${diaInicio.padStart(2, '0')}`;
+      const fechaFin = `${añoActual}-${meses[mesFin.toLowerCase().slice(0, 3)]}-${diaFin.padStart(2, '0')}`;
+
+      document.getElementById("fechaInicio").value = fechaInicio;
+      document.getElementById("fechaFin").value = fechaFin;
+    }
+
+    alert("✅ Datos importados desde la extensión");
+  });
+}
+
 </script>
 
 
