@@ -150,7 +150,7 @@
   <label for="reservaId"><strong>Codigo Reserva Airbnb:</strong></label>
   <input type="text" id="reservaId"  style="margin-left: 10px; padding: 6px; width: 250px;">
   <button onclick="abrirReserva()" style="margin-left: 10px; padding: 6px 12px;">🔍 Abrir</button>
-  <button onclick="importarDatosDesdeExtension()" style="margin-left: 10px; padding: 6px 12px;">📥 Importar datos</button>
+  <button onclick="importarDesdeClipboard()" style="margin-left: 10px; padding: 6px 12px;">📥 Importar datos</button>
 </div>
 <div class="contract-container" id="contrato">
   <h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
@@ -164,7 +164,9 @@
   </div>
   <div class="party-info">
     <p>
-      <strong>Y de otra, D./D.ª <input type="text" class="placeholder" id="guestname" maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input"  maxlength="100">, y con NIF/PASAPORTE <input type="text" class="placeholder"  maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
+      <strong>Y de otra, D./D.ª <input type="text" class="placeholder" id="guestname" maxlength="50"></strong>,
+       mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" id="guestaddress" maxlength="100">,
+        y con NIF/PASAPORTE <input type="text" class="placeholder"  maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
     </p>
   </div>
   <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
@@ -173,7 +175,7 @@
   
   <h3>Primera. Objeto del contrato</h3>
   <p>La Parte Arrendadora cede en arrendamiento a la Parte Arrendataria, quien acepta, la unidad de alojamiento ubicada en:</p>
- <input type="text" class="placeholder full-width-input"  maxlength="100">
+ <input type="text" class="placeholder full-width-input" id="alojamiento" maxlength="100">
   
   <h3>Segunda. Finalidad temporal del arrendamiento</h3>
   <p>El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
@@ -235,9 +237,9 @@
     </div>
   </div>
 </div>
-
-<button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
-
+<div style="text-align: center; margin-top: 20px;">
+  <button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
+</div>
 <div id="resultado" style="text-align: center; display: none; margin-top: 20px;">
   <input id="urlPdf" type="text" readonly style="width: 80%; padding: 8px;" />
   <button onclick="copiarLink()">📋 Copiar</button>
@@ -389,23 +391,24 @@
   const url = `https://www.airbnb.es/hosting/stay/${reserva}`;
   window.open(url, '_blank');
 }
-function importarDatosDesdeExtension() {
-  if (typeof chrome === 'undefined' || !chrome.storage) {
-    alert('❗ Este botón solo funciona desde una extensión o entorno con permisos de Chrome.');
-    return;
-  }
+async function importarDesdeClipboard() {
+  try {
+    const texto = await navigator.clipboard.readText();
+    const nombreMatch = texto.match(/👤 Inquilino:\s*(.+)/);
+    const alojamientoMatch = texto.match(/🏠 Alojamiento:\s*(.+)/);
+    const fechasMatch = texto.match(/📅 Fechas:\s*(.+)/);
 
-  chrome.storage.local.get(["nombre", "alojamiento", "fechas"], function (result) {
-    const { nombre, alojamiento, fechas } = result;
-    if (!nombre || !alojamiento || !fechas) {
-      alert("⚠️ No hay datos disponibles. Asegúrate de haber usado la extensión primero.");
+    if (!nombreMatch || !alojamientoMatch || !fechasMatch) {
+      alert("❌ No se encontraron datos válidos en el portapapeles.");
       return;
     }
 
-    document.getElementById("guestname").value = nombre;
+    const nombre = nombreMatch[1];
+    const alojamiento = alojamientoMatch[1];
+    const fechas = fechasMatch[1];
 
-    const alojamientoField = document.querySelectorAll("input.placeholder.full-width-input")[0];
-    if (alojamientoField) alojamientoField.value = alojamiento;
+    document.getElementById("guestname").value = nombre;
+    document.getElementById("alojamiento").value = alojamiento;
 
     const fechasRegex = /(\d{1,2})\s(\w+)\s[–-]\s(\d{1,2})\s(\w+)/;
     const match = fechas.match(fechasRegex);
@@ -430,8 +433,12 @@ function importarDatosDesdeExtension() {
       document.getElementById("fechaFin").value = fechaFin;
     }
 
-    alert("✅ Datos importados desde la extensión");
-  });
+    alert("✅ Datos pegados desde el portapapeles");
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Error al leer desde el portapapeles");
+  }
 }
 
 </script>
