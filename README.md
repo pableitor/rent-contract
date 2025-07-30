@@ -53,10 +53,9 @@ A modern web tool to generate, export, and send personalized rental contracts fr
 
 ## 📁 Files
 
-- `contract.html` – Main interactive form (was `plantilla.html`)
-- `upload.js` – Handles S3 upload
-- `pdf-generator.js` – Generates the PDF
-- `style.css` – (optional) Custom styles
+- `contract.html` – Main interactive form 
+- `scripts.js` – Handles the button behaviours
+- `style.css` –  Custom styles
 - `README.md` – This file
 
 ---
@@ -66,7 +65,7 @@ A modern web tool to generate, export, and send personalized rental contracts fr
 To host your own version:
 
 1. Fork or clone this repo
-2. Replace `awsConfig` with your own S3 credentials (`upload.js`)
+2. Replace `awsConfig` with your own S3 credentials (`scripts.js`)
 3. Deploy to GitHub Pages or your preferred static host
 
 ---
@@ -79,4 +78,4 @@ MIT License. Feel free to copy, fork, improve, or adapt it for your own needs.
 
 ## 🙌 Credits
 
-Made with 💻 and ☕ by [Pableitor](https://github.com/pableitor)
+Made with 💻 and ☕ by [pableitor](https://github.com/pableitor)
