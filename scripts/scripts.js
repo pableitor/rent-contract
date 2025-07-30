@@ -178,3 +178,35 @@ async function importarDesdeClipboard() {
     alert("❌ Error al leer desde el portapapeles");
   }
 }
+
+// === Editor Toggle Logic ===
+const toggleButton = document.getElementById("editorToggle");
+const htmlEditor = document.getElementById("htmlEditor");
+const contratoDiv = document.getElementById("contrato");
+
+let modoEdicion = false;
+
+// Al iniciar, cargamos el HTML del contrato
+fetch("contract-content.html")
+  .then(response => response.text())
+  .then(html => {
+    contratoDiv.innerHTML = html;
+  });
+
+toggleButton.addEventListener("click", () => {
+  if (!modoEdicion) {
+    // Activar modo edición
+    htmlEditor.value = contratoDiv.innerHTML.trim();
+    contratoDiv.style.display = "none";
+    htmlEditor.style.display = "block";
+    toggleButton.textContent = "✅ Guardar cambios";
+    modoEdicion = true;
+  } else {
+    // Desactivar modo edición
+    contratoDiv.innerHTML = htmlEditor.value;
+    contratoDiv.style.display = "block";
+    htmlEditor.style.display = "none";
+    toggleButton.textContent = "✏️ Editar HTML";
+    modoEdicion = false;
+  }
+});
