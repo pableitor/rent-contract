@@ -34,21 +34,6 @@ toggleButton.addEventListener("click", () => {
 
 
 
-
-// --- Signature Pad Logic ---
-const signaturePads = {};
-['firmaArrendadora', 'firmaArrendataria'].forEach(id => {
-  const canvas = document.getElementById(id);
-  canvas.signaturePad = new SignaturePad(canvas, { backgroundColor: 'rgba(252, 252, 252, 1)' });
-  signaturePads[id] = canvas.signaturePad;
-});
-document.querySelectorAll('.clear-signature-btn').forEach(button => {
-  button.addEventListener('click', (event) => {
-    const canvasId = event.target.dataset.canvasId;
-    if (signaturePads[canvasId]) { signaturePads[canvasId].clear(); }
-  });
-});
-
 // --- Logic para mostrar/ocultar el campo "Otros" ---
 const purposeRadios = document.querySelectorAll('input[name="purpose"]');
 const otrosDetailsInput = document.getElementById('purpose-otros-details');
@@ -215,3 +200,4 @@ async function importarDesdeClipboard() {
     alert("❌ Error al leer desde el portapapeles");
   }
 }
+
