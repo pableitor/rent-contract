@@ -12,6 +12,7 @@ fetch("contract-content.html")
   .then(response => response.text())
   .then(html => {
     contratoDiv.innerHTML = html;
+    inicializarFirmas(); // 👈 IMPORTANTE: ahora sí inicializamos las firmas
   });
 
 toggleButton.addEventListener("click", () => {
@@ -199,5 +200,55 @@ async function importarDesdeClipboard() {
     console.error(err);
     alert("❌ Error al leer desde el portapapeles");
   }
+}
+
+function inicializarFirmas() {
+  const signaturePads = {};
+  ['firmaArrendadora', 'firmaArrendataria'].forEach(id => {
+    const canvas = document.getElementById(id);
+    if (!canvas) return;
+
+    // Ajuste para alta resolución
+    const resizeCanvas = (canvas) => {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext("2d").scale(ratio, ratio);
+    };
+
+    resizeCanvas(canvas);
+
+    const pad = new SignaturePad(canvas, {
+      backgroundColor: 'rgba(252, 252, 252, 1)'
+    });
+
+    canvas.signaturePad = pad;
+    signaturePads[id] = pad;
+  });
+
+  // Botones para borrar
+  document.querySelectorAll('.clear-signature-btn').forEach(button => {
+    button.addEventListener('click', (event) => {
+      const canvasId = event.target.dataset.canvasId;
+      const canvas = document.getElementById(canvasId);
+      if (canvas && canvas.signaturePad) {
+        canvas.signaturePad.clear();
+      }
+    });
+  });
+
+  // Auto-resize en redimensionar ventana
+  window.addEventListener("resize", () => {
+    Object.values(signaturePads).forEach(pad => {
+      const canvas = pad._canvas;
+      const data = pad.toData();
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext("2d").scale(ratio, ratio);
+      pad.clear();
+      pad.fromData(data);
+    });
+  });
 }
 
