@@ -81,3 +81,19 @@
     <button class="clear-signature-btn" data-canvas-id="firmaArrendataria">Borrar Firma</button>
   </div>
 </div>
+<script>
+
+// --- Signature Pad Logic ---
+const signaturePads = {};
+['firmaArrendadora', 'firmaArrendataria'].forEach(id => {
+  const canvas = document.getElementById(id);
+  canvas.signaturePad = new SignaturePad(canvas, { backgroundColor: 'rgba(252, 252, 252, 1)' });
+  signaturePads[id] = canvas.signaturePad;
+});
+document.querySelectorAll('.clear-signature-btn').forEach(button => {
+  button.addEventListener('click', (event) => {
+    const canvasId = event.target.dataset.canvasId;
+    if (signaturePads[canvasId]) { signaturePads[canvasId].clear(); }
+  });
+});
+</script>
