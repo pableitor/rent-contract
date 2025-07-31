@@ -30,6 +30,8 @@ toggleButton.addEventListener("click", () => {
     htmlEditor.style.display = "none";
     toggleButton.textContent = "✏️ Editar HTML";
     modoEdicion = false;
+    // 🔁 Reinicializar firmas después de actualizar el HTML
+    inicializarFirmas();
   }
 });
 
