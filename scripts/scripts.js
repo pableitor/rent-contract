@@ -13,6 +13,7 @@ fetch("contract-content.html")
   .then(html => {
     contratoDiv.innerHTML = html;
     inicializarFirmas(); // 👈 IMPORTANTE: ahora sí inicializamos las firmas
+    inicializarPurposeRadios(); // 👈 Aquí también
   });
 
 toggleButton.addEventListener("click", () => {
@@ -30,26 +31,35 @@ toggleButton.addEventListener("click", () => {
     htmlEditor.style.display = "none";
     toggleButton.textContent = "✏️ Editar HTML";
     modoEdicion = false;
-    // 🔁 Reinicializar firmas después de actualizar el HTML
-    inicializarFirmas();
+    inicializarFirmas();     // 🔁 Reinicializar firmas después de actualizar el HTML
+    inicializarPurposeRadios(); // 👈 Aquí también
   }
 });
 
 
 
 // --- Logic para mostrar/ocultar el campo "Otros" ---
-const purposeRadios = document.querySelectorAll('input[name="purpose"]');
-const otrosDetailsInput = document.getElementById('purpose-otros-details');
-purposeRadios.forEach(radio => {
-  radio.addEventListener('change', () => {
-    if (document.getElementById('purpose-otros').checked) {
-      otrosDetailsInput.style.display = 'inline-block';
-    } else {
-      otrosDetailsInput.style.display = 'none';
-      otrosDetailsInput.value = '';
-    }
+
+function inicializarPurposeRadios() {
+  const purposeRadios = document.querySelectorAll('input[name="purpose"]');
+  const otrosDetailsInput = document.getElementById('purpose-otros-details');
+
+  if (!purposeRadios.length || !otrosDetailsInput) return;
+
+  // Comprobar el estado inicial
+  otrosDetailsInput.style.display = document.getElementById('purpose-otros')?.checked ? 'inline-block' : 'none';
+
+  purposeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (document.getElementById('purpose-otros').checked) {
+        otrosDetailsInput.style.display = 'inline-block';
+      } else {
+        otrosDetailsInput.style.display = 'none';
+        otrosDetailsInput.value = '';
+      }
+    });
   });
-});
+}
 
 function resizeCanvas(canvas) {
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
