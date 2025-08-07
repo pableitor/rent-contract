@@ -35,15 +35,15 @@
 </head>
 <body>
   <div style="max-width: 800px; margin: auto; margin-bottom: 20px; text-align: center;">
-    <label for="reservaId"><strong>Codigo Reserva Airbnb:</strong></label>
+    <label for="reservaId"><strong>Airbnb reservation code:</strong></label>
     <input type="text" id="reservaId" style="margin-left: 10px; padding: 6px; width: 250px;">
-    <button onclick="abrirReserva()" style="margin-left: 10px; padding: 6px 12px;">🔍 Abrir</button>
-    <button onclick="importarDesdeClipboard()" style="margin-left: 10px; padding: 6px 12px;">📥 Importar datos</button>
+    <button onclick="abrirReserva()" style="margin-left: 10px; padding: 6px 12px;">🔍 Open</button>
+    <button onclick="importarDesdeClipboard()" style="margin-left: 10px; padding: 6px 12px;">📥 Import data</button>
   </div>
 
 <!-- Botón fuera del editor -->
 <div style="text-align: center; margin-bottom: 10px;">
-  <button id="editorToggle">✏️ Editar HTML</button>
+  <button id="editorToggle">✏️ Edit HTML</button>
 </div>
 
 <!-- Editor y contrato -->
@@ -53,12 +53,12 @@
 </div>
 
   <div style="text-align: center; margin-top: 20px;">
-    <button onclick="subirPDFaS3()">📤 Subir PDF a S3</button>
+    <button onclick="subirPDFaS3()">📤 Save PDF</button>
   </div>
 
   <div id="resultado" style="text-align: center; display: none; margin-top: 20px;">
     <input id="urlPdf" type="text" readonly style="width: 80%; padding: 8px;" />
-    <button onclick="copiarLink()">📋 Copiar</button>
+    <button onclick="copiarLink()">📋 Copy link</button>
     <button onclick="compartirWhatsApp()">📲 WhatsApp</button>
   </div>
 </body>
