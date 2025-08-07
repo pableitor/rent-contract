@@ -4,14 +4,14 @@
 <h2>REUNIDOS</h2>
 <div class="party-info">
   <p>
-    <strong>De una parte, D./D.ª XXXXXX    XXXXX</strong>, mayor de edad, con domicilio en XXXXXXX XXXXX NN , y con NIF  01234567P , en adelante, la <strong>Parte Arrendadora</strong>.
+    <strong>De una parte, D./D.ª <input type="text" class="placeholder" id="hostname" maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" id="hostaddress" maxlength="100">, y con NIF <input type="text" class="placeholder" maxlength="25">, en adelante, la <strong>Parte Arrendadora</strong>.
   </p>
 </div>
 <div class="party-info">
   <p>
     <strong>Y de otra, D./D.ª <input type="text" class="placeholder" id="guestname" maxlength="50"></strong>,
      mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" id="guestaddress" maxlength="100">,
-      y con NIF/PASAPORTE <input type="text" class="placeholder"  maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
+      y con NIF/PASAPORTE <input type="text" class="placeholder" maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
   </p>
 </div>
 <p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
@@ -41,7 +41,7 @@
       <input type="radio" id="purpose-otros" name="purpose" value="Otros">
       <label for="purpose-otros">
           Otros
-          <input type="text" id="purpose-otros-details" class="placeholder"  maxlength="50">
+          <input type="text" id="purpose-otros-details" class="placeholder" maxlength="50" style="display: none;">
       </label>
   </div>
 </div>
@@ -72,12 +72,12 @@
 <div class="signatures-container">
   <div class="signature-section">
     <p>LA PARTE ARRENDADORA:</p>
-    <canvas height="200" id="firmaArrendadora" width="300"></canvas>
+    <canvas height="500" id="firmaArrendadora" width="750" style="touch-action: none; user-select: none;"></canvas>
     <button class="clear-signature-btn" data-canvas-id="firmaArrendadora">Borrar Firma</button>
   </div>
   <div class="signature-section">
     <p>LA PARTE ARRENDATARIA:</p>
-    <canvas height="200" id="firmaArrendataria" width="300"></canvas>
+    <canvas height="500" id="firmaArrendataria" width="750" style="touch-action: none; user-select: none;"></canvas>
     <button class="clear-signature-btn" data-canvas-id="firmaArrendataria">Borrar Firma</button>
   </div>
 </div>
