@@ -28,8 +28,8 @@ A modern web tool to generate, export, and send personalized rental contracts fr
 
 ## 🚀 How to Use
 
-1. Open the [contract form](https://pableitor.github.io/rent-contract/contract.html).
-2. Enter the Airbnb reservation number or copy/paste the formatted text from a reservation page:
+1. Open the [contract form](https://pableitor.github.io/rent-contract/contract.html).  The page will automatically load the contract-content.html file which is the user-defined HTML contract template.
+2. (optional) Enter the Airbnb reservation number or copy/paste the formatted text from a reservation page :
 👤 Inquilino: John Doe
 🏠 Alojamiento: Room 3 · Cozy downtown loft
 📅 Fechas: 15 ago – 20 ago (5 noches)
@@ -57,6 +57,7 @@ A modern web tool to generate, export, and send personalized rental contracts fr
 - `scripts.js` – Handles the button behaviours
 - `style.css` –  Custom styles
 - `README.md` – This file
+- `contract-content.html` – User defined HTML contract template
 
 ---
 
