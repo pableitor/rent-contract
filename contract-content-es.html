@@ -1,0 +1,83 @@
+<h1>CONTRATO DE ARRENDAMIENTO DE ESTANCIAS TEMPORALES NO VACACIONALES</h1>
+<p style="text-align:right;">En Madrid, a <input type="date" class="placeholder" id="fechaContrato"></p>
+
+<h2>REUNIDOS</h2>
+<div class="party-info">
+  <p>
+    <strong>De una parte, D./D.ª <input type="text" class="placeholder" id="hostname" maxlength="50"></strong>, mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" id="hostaddress" maxlength="100">, y con NIF <input type="text" class="placeholder" maxlength="25">, en adelante, la <strong>Parte Arrendadora</strong>.
+  </p>
+</div>
+<div class="party-info">
+  <p>
+    <strong>Y de otra, D./D.ª <input type="text" class="placeholder" id="guestname" maxlength="50"></strong>,
+     mayor de edad, con domicilio en <input type="text" class="placeholder full-width-input" id="guestaddress" maxlength="100">,
+      y con NIF/PASAPORTE <input type="text" class="placeholder" maxlength="25">, en adelante, la <strong>Parte Arrendataria</strong>.
+  </p>
+</div>
+<p>Ambas partes, reconociéndose capacidad legal suficiente, acuerdan formalizar el presente contrato de arrendamiento de corta duración, con sujeción a las siguientes:</p>
+
+<h2>CLÁUSULAS</h2>
+
+<h3>Primera. Objeto del contrato</h3>
+<p>La Parte Arrendadora cede en arrendamiento a la Parte Arrendataria, quien acepta, la unidad de alojamiento ubicada en:</p>
+<input type="text" class="placeholder full-width-input" id="alojamiento" maxlength="100">
+
+<h3>Segunda. Finalidad temporal del arrendamiento</h3>
+<p>El arrendamiento tiene carácter temporal y no permanente, destinado a:</p>
+<div class="purpose-list">
+  <div class="purpose-option">
+      <input type="radio" id="purpose-trabajo" name="purpose" value="Trabajo temporal"><label for="purpose-trabajo">Trabajo temporal</label>
+  </div>
+  <div class="purpose-option">
+      <input type="radio" id="purpose-estudios" name="purpose" value="Estudios"><label for="purpose-estudios">Estudios</label>
+  </div>
+  <div class="purpose-option">
+      <input type="radio" id="purpose-medico" name="purpose" value="Tratamiento médico"><label for="purpose-medico">Tratamiento médico</label>
+  </div>
+  <div class="purpose-option">
+      <input type="radio" id="purpose-personal" name="purpose" value="Motivos personales / familiares"><label for="purpose-personal">Motivos personales / familiares</label>
+  </div>
+  <div class="purpose-option">
+      <input type="radio" id="purpose-otros" name="purpose" value="Otros">
+      <label for="purpose-otros">
+          Otros
+          <input type="text" id="purpose-otros-details" class="placeholder" maxlength="50" style="display: none;">
+      </label>
+  </div>
+</div>
+<p>Conforme al artículo 3 de la Ley de Arrendamientos Urbanos, este contrato no se rige por las disposiciones aplicables al arrendamiento de vivienda habitual.</p>
+
+<h3>Tercera. Duración</h3>
+<p>El presente contrato tendrá una duración desde el día <input type="date" class="placeholder" id="fechaInicio"> hasta el día <input type="date" class="placeholder" id="fechaFin">, sin posibilidad de prórroga tácita, salvo acuerdo expreso.</p>
+
+<h3>Cuarta. Renta y forma de pago</h3>
+<p>El precio del arrendamiento ha sido acordado y satisfecho íntegramente a través de la plataforma digital AIRBNB.</p>
+<p>Dicha plataforma incluye tasas e impuestos en la gestión del pago. Las partes reconocen haber aceptado las condiciones económicas en dicha plataforma.</p>
+
+<h3>Quinta. Fianza</h3>
+<p>Al tratarse del arrendamiento temporal de una habitación ubicada dentro de la vivienda habitual de la parte arrendadora, las partes acuerdan no establecer fianza alguna.</p>
+<p>Esta exención se realiza conforme al carácter temporal del arrendamiento y la naturaleza del uso compartido del inmueble, en ejercicio de la libertad contractual reconocida por la normativa civil vigente.</p>
+
+<h3>Sexta. Uso y conservación</h3>
+<p>El arrendatario usará el alojamiento exclusivamente como vivienda temporal, sin realizar actividades molestas o ilegales.</p>
+
+<h3>Séptima. Protección de datos personales</h3>
+<p>En cumplimiento del RGPD y LOPDGDD, se informa que los datos personales se tratarán para la gestión del arrendamiento y podrán comunicarse al Registro y la Ventanilla Única Digital. El arrendatario podrá ejercer sus derechos de protección de datos.</p>
+
+<h3>Octava. Legislación aplicable</h3>
+<p>Este contrato se rige por el Código Civil, la LAU, el Real Decreto 1312/2024 y normativa aplicable.</p>
+
+<p style="text-align:center; margin-top: 3rem;">Firmado por duplicado en el lugar y fecha indicados.</p>
+
+<div class="signatures-container">
+  <div class="signature-section">
+    <p>LA PARTE ARRENDADORA:</p>
+    <canvas height="500" id="firmaArrendadora" width="750" style="touch-action: none; user-select: none;"></canvas>
+    <button class="clear-signature-btn" data-canvas-id="firmaArrendadora">Borrar Firma</button>
+  </div>
+  <div class="signature-section">
+    <p>LA PARTE ARRENDATARIA:</p>
+    <canvas height="500" id="firmaArrendataria" width="750" style="touch-action: none; user-select: none;"></canvas>
+    <button class="clear-signature-btn" data-canvas-id="firmaArrendataria">Borrar Firma</button>
+  </div>
+</div>
